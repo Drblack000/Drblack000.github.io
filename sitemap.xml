@@ -11,15 +11,6 @@
   </url>
   
   <url>
-    <loc>https://drblack000.github.io/2023/09/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%90%B4%E6%81%A9%E8%BE%BE/</loc>
-    
-    <lastmod>2023-09-13</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://drblack000.github.io/2023/09/05/Kali%E6%93%8D%E4%BD%9C+%E9%85%8D%E7%BD%AE/</loc>
     
     <lastmod>2023-09-11</lastmod>
@@ -117,6 +108,13 @@
     <priority>1.0</priority>
   </url>
 
+  
+  <url>
+    <loc>https://drblack000.github.io/tags/vuln%E9%9D%B6%E6%9C%BA/</loc>
+    <lastmod>2023-09-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
   
   <url>
     <loc>https://drblack000.github.io/tags/%E7%9F%A5%E8%AF%86%E7%82%B9/</loc>
