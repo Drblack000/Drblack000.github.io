@@ -6,6 +6,10 @@ Allow: /archives/
 Allow: /tags/
 Allow: /2023/
 Allow: /images/
+Allow: /css/
+Allow: /js/
+Allow: /page/
+
 
 Disallow: /assets/
 Disallow: /img/
