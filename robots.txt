@@ -1,0 +1,17 @@
+# hexo robots.txt
+User-agent: *
+Allow: /
+Allow: /about/
+Allow: /archives/
+Allow: /tags/
+Allow: /2023/
+Allow: /images/
+
+Disallow: /assets/
+Disallow: /img/
+Disallow: /js/
+Disallow: /css/
+Disallow: /links/
+
+Sitemap: http://Drblack000.github.io/sitemap.xml
+Sitemap: http://Drblack.github.io/baidusitemap.xml
