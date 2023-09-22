@@ -14,4 +14,4 @@ Disallow: /css/
 Disallow: /links/
 
 Sitemap: http://Drblack000.github.io/sitemap.xml
-Sitemap: http://Drblack.github.io/baidusitemap.xml
+Sitemap: http://Drblack000.github.io/baidusitemap.xml
