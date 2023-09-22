@@ -8,6 +8,7 @@ Allow: /2023/
 Allow: /images/
 Allow: /css/
 Allow: /js/
+Allow: /img/
 Allow: /page/
 
 
