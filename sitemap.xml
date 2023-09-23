@@ -112,29 +112,29 @@
 
   <url>
     <loc>https://drblack.top/</loc>
-    <lastmod>2023-09-22</lastmod>
+    <lastmod>2023-09-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
   
   <url>
-    <loc>https://drblack.top/tags/%E7%9F%A5%E8%AF%86%E7%82%B9/</loc>
-    <lastmod>2023-09-22</lastmod>
+    <loc>https://drblack.top/tags/vuln%E9%9D%B6%E6%9C%BA/</loc>
+    <lastmod>2023-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://drblack.top/tags/vuln%E9%9D%B6%E6%9C%BA/</loc>
-    <lastmod>2023-09-22</lastmod>
+    <loc>https://drblack.top/tags/%E7%9F%A5%E8%AF%86%E7%82%B9/</loc>
+    <lastmod>2023-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://drblack.top/tags/vuln-stack%E7%B3%BB%E5%88%97/</loc>
-    <lastmod>2023-09-22</lastmod>
+    <lastmod>2023-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
