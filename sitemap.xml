@@ -2,9 +2,18 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://drblack.top/2020/10/09/upload-labs%20Pass1-21%E9%80%9A%E5%85%B3%E7%AC%94%E8%AE%B0%20/</loc>
+    
+    <lastmod>2023-10-20</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://drblack.top/2023/10/13/Prime_Series/</loc>
     
-    <lastmod>2023-10-13</lastmod>
+    <lastmod>2023-10-20</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -112,7 +121,7 @@
 
   <url>
     <loc>https://drblack.top/</loc>
-    <lastmod>2023-10-13</lastmod>
+    <lastmod>2023-10-20</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -120,21 +129,21 @@
   
   <url>
     <loc>https://drblack.top/tags/vulnhub/</loc>
-    <lastmod>2023-10-13</lastmod>
+    <lastmod>2023-10-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://drblack.top/tags/%E7%9F%A5%E8%AF%86%E7%82%B9/</loc>
-    <lastmod>2023-10-13</lastmod>
+    <lastmod>2023-10-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://drblack.top/tags/vulnstack/</loc>
-    <lastmod>2023-10-13</lastmod>
+    <lastmod>2023-10-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
