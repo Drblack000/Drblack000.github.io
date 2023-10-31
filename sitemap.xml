@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://drblack.top/google0171ccc753458695.html</loc>
+    
+    <lastmod>2023-10-31</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://drblack.top/2023/09/10/vulnstack%20%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA%EF%BC%88%E4%B8%80%EF%BC%89/</loc>
     
     <lastmod>2023-10-31</lastmod>
@@ -110,15 +119,6 @@
   </url>
   
   <url>
-    <loc>https://drblack.top/google0171ccc753458695.html</loc>
-    
-    <lastmod>2023-09-22</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://drblack.top/2023/05/20/%E4%B8%80%E6%AE%B5%E7%AE%80%E8%BF%B0/</loc>
     
     <lastmod>2023-05-22</lastmod>
@@ -137,14 +137,14 @@
 
   
   <url>
-    <loc>https://drblack.top/tags/vulnhub/</loc>
+    <loc>https://drblack.top/tags/%E7%9F%A5%E8%AF%86%E7%82%B9/</loc>
     <lastmod>2023-10-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://drblack.top/tags/%E7%9F%A5%E8%AF%86%E7%82%B9/</loc>
+    <loc>https://drblack.top/tags/vulnhub/</loc>
     <lastmod>2023-10-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
