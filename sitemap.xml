@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://drblack.top/about/index.html</loc>
+    
+    <lastmod>2023-11-02</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://drblack.top/categories/index.html</loc>
     
     <lastmod>2023-11-02</lastmod>
@@ -178,14 +187,14 @@
   </url>
   
   <url>
-    <loc>https://drblack.top/tags/%E5%86%85%E7%BD%91%E6%94%BB%E9%98%B2/</loc>
+    <loc>https://drblack.top/tags/vulnstack/</loc>
     <lastmod>2023-11-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://drblack.top/tags/vulnstack/</loc>
+    <loc>https://drblack.top/tags/%E5%86%85%E7%BD%91%E6%94%BB%E9%98%B2/</loc>
     <lastmod>2023-11-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
