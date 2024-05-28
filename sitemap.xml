@@ -200,6 +200,13 @@
 
   
   <url>
+    <loc>https://drblack.top/tags/vulnhub/</loc>
+    <lastmod>2024-05-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://drblack.top/tags/%E5%86%85%E7%BD%91%E6%94%BB%E9%98%B2/</loc>
     <lastmod>2024-05-28</lastmod>
     <changefreq>weekly</changefreq>
@@ -208,13 +215,6 @@
   
   <url>
     <loc>https://drblack.top/tags/%E7%9F%A5%E8%AF%86%E7%82%B9/</loc>
-    <lastmod>2024-05-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://drblack.top/tags/vulnhub/</loc>
     <lastmod>2024-05-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
