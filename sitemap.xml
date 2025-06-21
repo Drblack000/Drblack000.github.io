@@ -65,7 +65,7 @@
   </url>
   
   <url>
-    <loc>https://drblack.top/2023/10/20/upload-labs-Pass1-21%E9%80%9A%E5%85%B3%E7%AC%94%E8%AE%B0%20/</loc>
+    <loc>https://drblack.top/2023/10/20/upload-labs-Pass1-21%E9%80%9A%E5%85%B3%E7%AC%94%E8%AE%B0/</loc>
     
     <lastmod>2023-11-02</lastmod>
     
@@ -209,13 +209,6 @@
 
   
   <url>
-    <loc>https://drblack.top/tags/vulnhub/</loc>
-    <lastmod>2025-06-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://drblack.top/tags/%E5%86%85%E7%BD%91%E6%94%BB%E9%98%B2/</loc>
     <lastmod>2025-06-21</lastmod>
     <changefreq>weekly</changefreq>
@@ -224,6 +217,13 @@
   
   <url>
     <loc>https://drblack.top/tags/%E7%9F%A5%E8%AF%86%E7%82%B9/</loc>
+    <lastmod>2025-06-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://drblack.top/tags/vulnhub/</loc>
     <lastmod>2025-06-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
