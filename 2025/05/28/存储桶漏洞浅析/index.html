@@ -1,0 +1,386 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>存储同漏洞浅析 | Drblack'Blog</title><meta name="author" content="Drblack"><meta name="copyright" content="Drblack"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="常见概念“S3 存储桶” 是亚马逊 AWS（Amazon Web Services）对象存储服务（Simple Storage Service）的专属术语，其命名、API 接口、权限模型均为 AWS 私有标准。例如：AWS S3 存储桶的域名格式为 bucket-name.s3.amazonaws.com 主流厂商的命名惯例所有云服务商的对象存储服务均使用独立品牌名称，避免与 AWS S3 混淆：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="存储同漏洞浅析">
+<meta property="og:url" content="https://drblack.top/2025/05/28/%E5%AD%98%E5%82%A8%E6%A1%B6%E6%BC%8F%E6%B4%9E%E6%B5%85%E6%9E%90/index.html">
+<meta property="og:site_name" content="Drblack&#39;Blog">
+<meta property="og:description" content="常见概念“S3 存储桶” 是亚马逊 AWS（Amazon Web Services）对象存储服务（Simple Storage Service）的专属术语，其命名、API 接口、权限模型均为 AWS 私有标准。例如：AWS S3 存储桶的域名格式为 bucket-name.s3.amazonaws.com 主流厂商的命名惯例所有云服务商的对象存储服务均使用独立品牌名称，避免与 AWS S3 混淆：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://drblack.top/img/1000.webp">
+<meta property="article:published_time" content="2025-05-28T11:04:23.000Z">
+<meta property="article:modified_time" content="2025-06-21T05:50:54.577Z">
+<meta property="article:author" content="Drblack">
+<meta property="article:tag" content="云安全">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://drblack.top/img/1000.webp"><link rel="shortcut icon" href="/img/1000.webp"><link rel="canonical" href="https://drblack.top/2025/05/28/%E5%AD%98%E5%82%A8%E6%A1%B6%E6%BC%8F%E6%B4%9E%E6%B5%85%E6%9E%90/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="google-site-verification" content="8KYdLccZEOQiOgJvHftvX7-2pkkmhBMvMXO4inbIkLw"/><meta name="baidu-site-verification" content="codeva-t56Dl5qqYL"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '存储同漏洞浅析',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-06-21 13:50:54'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><meta name="generator" content="Hexo 6.3.0"></head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+document.addEventListener('pjax:send', () => {
+  Pace.restart()
+})
+</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js/themes/blue/pace-theme-minimal.min.css"/><script src="https://cdn.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/1000.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">18</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首頁</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 時間軸</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 標籤</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分類</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 清單</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音樂</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 電影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友鏈</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 關於</span></a></div><div class="menus_item"><a class="site-page" href="/sitemap.xml"><i class="fa-fw sitemap"></i><span> sitemap</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Drblack'Blog"><span class="site-name">Drblack'Blog</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首頁</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 時間軸</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 標籤</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分類</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 清單</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音樂</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 電影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友鏈</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 關於</span></a></div><div class="menus_item"><a class="site-page" href="/sitemap.xml"><i class="fa-fw sitemap"></i><span> sitemap</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">存储同漏洞浅析</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-05-28T11:04:23.000Z" title="发表于 2025-05-28 19:04:23">2025-05-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-06-21T05:50:54.577Z" title="更新于 2025-06-21 13:50:54">2025-06-21</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>14分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="存储同漏洞浅析"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="常见概念"><a href="#常见概念" class="headerlink" title="常见概念"></a>常见概念</h2><p>“S3 存储桶” 是亚马逊 AWS（Amazon Web Services）对象存储服务（Simple Storage Service）的专属术语，其命名、API 接口、权限模型均为 AWS 私有标准。例如：AWS S3 存储桶的域名格式为 <code>bucket-name.s3.amazonaws.com</code></p>
+<p><strong>主流厂商的命名惯例</strong><br>所有云服务商的对象存储服务均使用独立品牌名称，避免与 AWS S3 混淆：</p>
+<pre><code>- **腾讯云**：对象存储（COS，Cloud Object Storage），存储桶称为 “COS 存储桶”
+- **华为云**：对象存储服务（OBS，Object Storage Service），存储桶称为 “OBS 桶”
+- **谷歌云**：云存储（Cloud Storage），存储桶称为 “GCS 存储桶”
+- **&lt;font style=&quot;color:rgba(0, 0, 0, 0.85);&quot;&gt;阿里云&lt;/font&gt;**&lt;font style=&quot;color:rgba(0, 0, 0, 0.85);&quot;&gt;: 对象存储服务名为 &lt;/font&gt;**OSS（Object Storage Service）**&lt;font style=&quot;color:rgba(0, 0, 0, 0.85);&quot;&gt;，其存储桶在官方文档中统一称为 “OSS 存储桶”，域名格式为 &lt;/font&gt;`&lt;font style=&quot;color:rgba(0, 0, 0, 0.85);&quot;&gt;bucket-name.oss-cn-hangzhou.aliyuncs.com&lt;/font&gt;`&lt;font style=&quot;color:rgba(0, 0, 0, 0.85);&quot;&gt;（以杭州区域为例），API 接口遵循阿里云自有规范（如&lt;/font&gt;`&lt;font style=&quot;color:rgba(0, 0, 0, 0.85);&quot;&gt;x-oss-acl&lt;/font&gt;`&lt;font style=&quot;color:rgba(0, 0, 0, 0.85);&quot;&gt;头部字段）。&lt;/font&gt;
+</code></pre>
+<p><strong>后文主要涉及阿里云的内容，详细介绍一下阿里云OSS的相关概念：</strong></p>
+<p>OSS：对象存储服务。对象存储可以简单理解为用来存储图片、音频、视频等非结构化数据的数据池。相对于主机服务器，具有读写速度快，利于分享的特点。</p>
+<p>OSS工作原理： 数据以对象（Object）的形式存储在OSS的存储空间（Bucket ）中。如果要使用OSS存储数据，您需要先创建Bucket，并指定Bucket的地域、访问权限、存储类型等属性。创建Bucket后，您可以将数据以Object的形式上传到Bucket，并指定Object的文件名（Key）作为其唯一标识。</p>
+<p><strong>相关定义：</strong></p>
+<p>Bucket：用户用来管理所存储Object的储物空间。</p>
+<p>Object：OSS存储数据的基本单元。</p>
+<p>Key：当存储文件（Object）时，需要指定此Object的名称（Key），后续您将通过这个Key来获取该Object的内容。 Key也可以用来模拟文件夹的一些属性。</p>
+<p>Data：存储的数据本体。</p>
+<p><strong>AccessKey</strong></p>
+<ul>
+<li><strong>AccessKey ID</strong>：它是一个唯一的标识符，类似于用户名，用于标识访问云服务的用户身份。云服务系统可以通过它识别出是哪个用户在发起请求。</li>
+<li><strong>AccessKey Secret</strong>：它是一个保密的字符串，类似于密码，需要严格保密。与 AccessKey ID 配合使用，用于对请求进行签名，确保请求的合法性和数据的安全性。</li>
+</ul>
+<h2 id="几种策略"><a href="#几种策略" class="headerlink" title="几种策略"></a>几种策略</h2><h3 id="Bucket-ACL策略"><a href="#Bucket-ACL策略" class="headerlink" title="Bucket ACL策略"></a><font style="color:rgb(51, 51, 51);">Bucket ACL策略</font></h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">当您希望粗粒度地控制某个Bucket的读写权限，即Bucket内的所有Object均为统一的读写权限时</span><br><span class="line">您可以选择使用Bucket ACL的方式。Bucket ACL包含公共读、公共读写和私有。</span><br><span class="line">您可以在创建Bucket时设置Bucket ACL，也可以在创建Bucket后根据自身的业务需求修改Bucket ACL</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/./images/20250621_1349072141.png"></p>
+<h3 id="Bucket-策略"><a href="#Bucket-策略" class="headerlink" title="Bucket 策略"></a>Bucket 策略</h3><p>OSS支持面向资源的授权方式，允许在Bucket级别而不是用户级别设置权限策略。使用Bucket Policy可以授权当前云账号或者其他阿里云账号下单个或多个RAM用户、RAM角色等访问Bucket内的指定资源。Bucket Policy除提供策略语法的授权方式以外，还提供了图形化界面的授权方式，助力您结合业务场景，快速完成授权。</p>
+<p><img src="/./images/20250621_1349072329.png"></p>
+<h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><p>先配置一下AWS命令，方便本地命令行去操作</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_45392321/article/details/134488239">https://blog.csdn.net/qq_45392321&#x2F;article&#x2F;details&#x2F;134488239</a></p>
+<p><strong>没有信用卡，注册不了AWS的海外账户，暂时不能测试AWS S3了</strong></p>
+<h2 id="阿里云"><a href="#阿里云" class="headerlink" title="阿里云"></a>阿里云</h2><p>先试试阿里云吧，先去阿里云官网免费试用一个oss</p>
+<p><img src="/./images/20250621_1349074102.png"></p>
+<p><img src="/./images/20250621_1349078411.png"></p>
+<p>试用成功后，找到对象存储控制台-创建Bucket</p>
+<p><img src="/./images/20250621_1349079429.png"></p>
+<p>找到文件上传部分，随意上传几个测试文件</p>
+<p><img src="/./images/20250621_1349076719.png"></p>
+<h2 id="华为云"><a href="#华为云" class="headerlink" title="华为云"></a>华为云</h2><p>华为云用于 bucket策略修改处使用</p>
+<p><a target="_blank" rel="noopener" href="https://www.huaweicloud.com/product/obs.html">https://www.huaweicloud.com/product/obs.html</a></p>
+<p><img src="/./images/20250621_1349088998.png"></p>
+<p>选最便宜的套餐</p>
+<p><img src="/./images/20250621_1349087934.png"></p>
+<p>进入控制台创建</p>
+<p><img src="/./images/20250621_1349089405.png"></p>
+<p>先随意配置一下权限</p>
+<p><img src="/./images/20250621_1349082607.png"></p>
+<h1 id="漏洞学习"><a href="#漏洞学习" class="headerlink" title="漏洞学习"></a>漏洞学习</h1><h2 id="遍历漏洞"><a href="#遍历漏洞" class="headerlink" title="遍历漏洞"></a>遍历漏洞</h2><p><font style="color:rgb(28, 30, 33);">在创建Bucket桶时，默认是private的权限，如果在错误的配置下，给了listobject权限，就会导致可遍历存储桶。</font></p>
+<h3 id="情况一-仅公有读写"><a href="#情况一-仅公有读写" class="headerlink" title="情况一  仅公有读写"></a><font style="color:rgb(28, 30, 33);">情况一  仅公有读写</font></h3><p><font style="color:rgb(28, 30, 33);">在只配置读写权限设置为</font><code>&lt;font style=&quot;color:rgb(28, 30, 33);&quot;&gt;公有读&lt;/font&gt;</code><font style="color:rgb(28, 30, 33);">或</font><code>&lt;font style=&quot;color:rgb(28, 30, 33);&quot;&gt;公共读写&lt;/font&gt;</code><font style="color:rgb(28, 30, 33);">，未配置Listobject的情况下</font></p>
+<p><img src="/./images/20250621_1349086260.png"></p>
+<p><font style="color:rgb(28, 30, 33);">无法直接列出对象</font></p>
+<p><img src="/./images/20250621_1349087349.png"></p>
+<p>但可以直接访问对应的文件路径</p>
+<p><img src="/./images/20250621_1349082066.png"></p>
+<h3 id="情况二-ListObject"><a href="#情况二-ListObject" class="headerlink" title="情况二 ListObject"></a><font style="color:rgb(28, 30, 33);">情况二 ListObject</font></h3><ol>
+<li>关闭<code>阻止公共访问</code></li>
+</ol>
+<p><font style="color:rgb(102, 102, 102);">OSS支持通过设置Bucket Policy和ACL来实现公共访问。公共访问无需特定权限或身份验证，容易引发数据泄露和外网下行流量的风险</font></p>
+<p><img src="/./images/20250621_1349088637.png"></p>
+<ol start="2">
+<li>授权ListObject操作</li>
+</ol>
+<p><img src="/./images/20250621_1349099448.png"></p>
+<p><img src="/./images/20250621_1349099614.png"></p>
+<ol start="3">
+<li>访问bucket域名测试</li>
+</ol>
+<p><img src="/./images/20250621_1349099283.png"></p>
+<p><img src="/./images/20250621_1349096052.png"></p>
+<p>发现我们上传的文件列表被成功遍历，通过拼接文件名即可下载所有文件。</p>
+<p><code>[https://bucket-drblack.oss-cn-beijing.aliyuncs.com/flag.txt](https://bucket-drblack.oss-cn-beijing.aliyuncs.com/flag.txt)</code></p>
+<h2 id="Bucket桶名爆破"><a href="#Bucket桶名爆破" class="headerlink" title="Bucket桶名爆破"></a>Bucket桶名爆破</h2><p><font style="color:rgba(0, 0, 0, 0.85);">类似于目录爆破，只不过目录爆破一般通过状态码判断，而这个通过页面的内容判断。</font>阿里云OSS的<font style="color:rgba(0, 0, 0, 0.85);">Bucket </font>不存在有两种状态，<font style="color:rgba(0, 0, 0, 0.85);">分别是 </font><code>&lt;font style=&quot;color:rgba(0, 0, 0, 0.85);&quot;&gt;InvalidBucketName&lt;/font&gt;</code><font style="color:rgba(0, 0, 0, 0.85);"> 和 </font><code>&lt;font style=&quot;color:rgba(0, 0, 0, 0.85);&quot;&gt;NoSuchBucket&lt;/font&gt;</code><font style="color:rgba(0, 0, 0, 0.85);">。</font></p>
+<p><img src="/./images/20250621_1349092107.png"></p>
+<p><img src="/./images/20250621_1349097389.png"></p>
+<p>无权限访问</p>
+<p><img src="/./images/20250621_1349095528.png"></p>
+<p>访问成功</p>
+<p><img src="/./images/20250621_1349097505.png"></p>
+<h2 id="任意文件上传-覆盖"><a href="#任意文件上传-覆盖" class="headerlink" title="任意文件上传&#x2F;覆盖"></a>任意文件上传&#x2F;覆盖</h2><p>设置读写权限</p>
+<p><img src="/./images/20250621_1349106652.png"></p>
+<p><img src="/./images/20250621_1349102080.png"></p>
+<p>文件成功上传并覆盖原文件</p>
+<p><img src="/./images/20250621_1349109399.png"></p>
+<h2 id="Bucket接管"><a href="#Bucket接管" class="headerlink" title="Bucket接管"></a><font style="color:rgb(28, 30, 33);">Bucket接管</font></h2><p><strong>漏洞原理：</strong>管理员通过域名解析并绑定了一个存储桶，但是管理员将存储桶删除后，没有将域名解析的CNAME删除，访问域名会出现NoSuchBucket。因此可以登录自己的华为云账号，创建同样的Bucket 进行接管。阿里云华为云等云存储桶接管方法差不多。</p>
+<p><font style="color:rgb(28, 30, 33);">当 Bucket 显示</font><code>&lt;font style=&quot;color:rgb(28, 30, 33);&quot;&gt; NoSuchBucket &lt;/font&gt;</code><font style="color:rgb(28, 30, 33);">即表明可接管。</font></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">body=&quot;NoSuchBucket&quot; &amp;&amp; body=&quot;BucketName&quot; &amp;&amp; body=&quot;aliyuncs.com&quot;</span><br></pre></td></tr></table></figure>
+
+<p>找到一个阿里云的桶，显示为<code>NoSuchBucket</code></p>
+<p><img src="/./images/20250621_1349104824.png"></p>
+<p><a target="_blank" rel="noopener" href="http://ztkrewitzhao.img-ap-southeast-1.aliyuncs.com/">http://ztkrewitzhao.img-ap-southeast-1.aliyuncs.com/</a></p>
+<p>注意<strong>地区、桶名称</strong>必须完全一致。翻阅文档确认为新加坡地区</p>
+<p><img src="/./images/20250621_1349103143.png"></p>
+<p><img src="/./images/20250621_1349107766.png"></p>
+<p>刷新后变为AccessDenied，接管成功</p>
+<p><img src="/./images/20250621_1349118454.png"></p>
+<p>修改权限后上传flag.txt，上传成功！</p>
+<p><img src="/./images/20250621_1349119735.png"></p>
+<h2 id="Access-key-泄露"><a href="#Access-key-泄露" class="headerlink" title="Access key 泄露"></a>Access key 泄露</h2><h3 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a><font style="color:rgb(0, 0, 0);">工作原理</font></h3><p>当你向云服务提供商的 API 发送请求时，需要在请求中包含 AccessKey ID 和经过 AccessKey Secret 签名的信息。云服务提供商接收到请求后，会根据 AccessKey ID 找到对应的用户，并使用相同的签名算法和 AccessKey Secret 对请求进行验证。如果验证通过，就会处理该请求；如果验证不通过，则会拒绝请求。</p>
+<p><strong>如果攻击者设法找到了AK与AS，就意味着对OSS云存储服务的直接接管</strong></p>
+<h3 id="寻找方法"><a href="#寻找方法" class="headerlink" title="寻找方法"></a>寻找方法</h3><ol>
+<li>敏感文件的泄露（Spring泄露的heapdump文件、数据库、运维的备份文件、内存泄漏等）</li>
+<li>phpinfo等探针文件也会抛出AS与AK</li>
+<li>ThinkPHP的Debug模式，以及其他的一些因配置不当报错而泄露AK与AS</li>
+<li>github等开源平台入手（适用于体量较大的目标）</li>
+</ol>
+<p>下面以本人的AccessKeyId做个简单测试。</p>
+<p>首先下载一个OSS浏览器，填充ID和Secret</p>
+<p><img src="/./images/20250621_1349111216.png"></p>
+<p>即可正常操作oss</p>
+<p><img src="/./images/20250621_1349111809.png"></p>
+<h2 id="STS-token重放攻击"><a href="#STS-token重放攻击" class="headerlink" title="STS token重放攻击"></a>STS token重放攻击</h2><p><font style="color:rgba(0, 0, 0, 0.85);">在阿里云 OSS（对象存储服务）中，</font><strong>STS（Security Token Service）Token</strong><font style="color:rgba(0, 0, 0, 0.85);"> 是一种临时安全凭证，用于替代长期访问密钥（AccessKey），为用户或应用程序提供临时、受限的 OSS 资源访问权限。</font>STS提供的是一种临时访问授权。通过STS可以返回临时的AK\SK和STSToken，这些信息可以直接发给临时用户用来访问OSS。</p>
+<p>具体案例查看如下链接</p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/EFm07aD0ailSsS1pFgvJEg">【漏洞挖掘系列】OSS的STS模式授权案例</a></p>
+<h2 id="Bucket策略修改"><a href="#Bucket策略修改" class="headerlink" title="Bucket策略修改"></a>Bucket策略修改</h2><p>这里阿里云和华为云都配置出来有点问题，</p>
+<p>先安装一个OSS的工具<code>ossutil</code></p>
+<p><a target="_blank" rel="noopener" href="https://help.aliyun.com/zh/oss/developer-reference/install-ossutil?spm=a2c4g.11186623.help-menu-31815.d_5_3_2_0.2a4c48a23A6cRl#4c30f1a48ce9y">下载并安装命令行工具ossutil_对象存储(OSS)-阿里云帮助中心</a></p>
+<p><img src="/./images/20250621_1349117985.png"></p>
+<p>配置bucket策略。</p>
+<p><strong>允许 ：</strong><code>&lt;font style=&quot;color:rgb(51, 51, 51);background-color:rgb(248, 250, 251);&quot;&gt;oss:PutBucketPolicy &lt;/font&gt;</code>   <code>&lt;font style=&quot;color:rgb(51, 51, 51);background-color:rgb(248, 250, 251);&quot;&gt;oss:GetBucketPolicy&lt;/font&gt;</code></p>
+<p><strong>禁止：</strong> <code>&lt;font style=&quot;color:rgb(51, 51, 51);&quot;&gt;oss:ListObjects&lt;/font&gt;</code><font style="color:rgb(51, 51, 51);">         </font><code>&lt;font style=&quot;color:rgb(51, 51, 51);&quot;&gt;oss:GetObject&lt;/font&gt;</code></p>
+<p><img src="/./images/20250621_1349116244.png"></p>
+<p>直接请求资源，被policy禁止</p>
+<p><img src="/./images/20250621_1349124263.png"></p>
+<p>通过ossutil查看bucket策略，可以通过Put上传Policy进行覆盖</p>
+<p><img src="/./images/20250621_1349127199.png"></p>
+<p>修改下面的<code>Deny</code>为<code>Allow</code>，存储为oss.json 然后上传</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ossutil bucket-policy oss://bucket-drblack --method put oss.json</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./images/20250621_1349129663.png"></p>
+<p>访问，恢复正常访问</p>
+<p><img src="/./images/20250621_1349121050.png"></p>
+<p>并且策略成功修改</p>
+<p><img src="/./images/20250621_1349123112.png"></p>
+<h2 id="ACL策略修改"><a href="#ACL策略修改" class="headerlink" title="ACL策略修改"></a>ACL策略修改</h2><p>华为云ACL权限配置之前</p>
+<p><img src="/./images/20250621_1349127059.png"></p>
+<p>配置可读后，可以看见成功显示了acl策略信息</p>
+<p><img src="/./images/20250621_1349132910.png"></p>
+<p><img src="/./images/20250621_1349133085.png"></p>
+<p>但目前只配置了可读权限，还不能实现ACL的文件覆盖进行策略修改。把权限改为<strong>ACL可读可写</strong>， 并且<strong>公共权限为私有</strong></p>
+<p><img src="/./images/20250621_1349131930.png"></p>
+<p>当直接访问界面，会显示403无权限，这时候尝试访问acl文件，查看权限。</p>
+<p><img src="/./images/20250621_1349135789.png"></p>
+<p>可建存在匿名用户对ACL的可写权限</p>
+<p><img src="/./images/20250621_1349136803.png"></p>
+<p>官方权限图</p>
+<p><img src="/./images/20250621_1349134317.png"></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">AccessControlPolicy</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://obs.myhwclouds.com/doc/2015-06-30/&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Owner</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ID</span>&gt;</span>ba3b02b27e1e48c2b71410ecc2c90fac<span class="tag">&lt;/<span class="name">ID</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Owner</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">AccessControlList</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Grant</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Grantee</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ID</span>&gt;</span>ba3b02b27e1e48c2b71410ecc2c90fac<span class="tag">&lt;/<span class="name">ID</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Grantee</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Permission</span>&gt;</span>FULL_CONTROL<span class="tag">&lt;/<span class="name">Permission</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Delivered</span>&gt;</span>false<span class="tag">&lt;/<span class="name">Delivered</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Grant</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Grant</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Grantee</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Canned</span>&gt;</span>Everyone<span class="tag">&lt;/<span class="name">Canned</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Grantee</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Permission</span>&gt;</span>FULL_CONTROL<span class="tag">&lt;/<span class="name">Permission</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Delivered</span>&gt;</span>false<span class="tag">&lt;/<span class="name">Delivered</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Grant</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">AccessControlList</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">AccessControlPolicy</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>PUT成功</p>
+<p><img src="/./images/20250621_1349145068.png"></p>
+<p>再次查看ACL发现成功，同时访问根目录成功</p>
+<p><img src="/./images/20250621_1349141055.png"></p>
+<p><img src="/./images/20250621_1349142056.png"></p>
+<h2 id="403-AccessDenied-绕过"><a href="#403-AccessDenied-绕过" class="headerlink" title="403 AccessDenied 绕过"></a><font style="color:rgb(0, 0, 0);">403 AccessDenied 绕过</font></h2><p>容易碰到以下的403现象</p>
+<p><img src="/./images/20250621_1349142373.png"></p>
+<hr>
+<p><strong>权限为私有</strong></p>
+<p>除非有Accesskey 和AccessSecret，否则没办法利用</p>
+<p><strong>没有配置listobject</strong></p>
+<p>没有包含ListObject操作，所以无法访问</p>
+<p><img src="/./images/20250621_1349149137.png"></p>
+<p><img src="/./images/20250621_1349158019.png"></p>
+<p>但可通过遍历文件目录去获取文件</p>
+<p><img src="/./images/20250621_1349151742.png"></p>
+<p><strong>存储桶地点错误</strong></p>
+<p>如果存储桶端点错误，也会出现403 AccessDenied，但存储桶不一定就是私有的，它会出现提示，给出正确的地点，只需要改为正确的地点访问就行，改为正确地点后，判断</p>
+<p><a target="_blank" rel="noopener" href="https://anern.oss-us-east-1.aliyuncs.com/">https://anern.oss-us-east-1.aliyuncs.com/</a></p>
+<p>比如先为hangzhou，改为beijing后恢复</p>
+<p><img src="/./images/20250621_1349158118.png"></p>
+<p><img src="/./images/20250621_1349159449.png"></p>
+<p>网络上还有个情况说是没有文件，即使存储桶非私有也会出现403，但是我测试后是正常的。</p>
+<p><img src="/./images/20250621_1349154559.png"></p>
+<h2 id="一些疑问"><a href="#一些疑问" class="headerlink" title="一些疑问"></a>一些疑问</h2><p>策略修改这部分，查询策略的时候，工具需要先配置accessKeySecret和accessKeyID，这里两个值目前认为是两种情况：</p>
+<ol>
+<li>配置自己的</li>
+</ol>
+<p>利用对方bucket策略缺陷，可以任何人查询其策略，然后再进行策略修改。实验一下</p>
+<p>但是阿里云测试时，只能当配置bucket策略为<strong>完全控制</strong>的时候可以访问到policy</p>
+<p><img src="/./images/20250621_1349156885.png"></p>
+<p><img src="/./images/20250621_1349158259.png"></p>
+<p><strong>但是如果是拎出来单独配置就不行？为什么  应该是哪里配置限制了。</strong><img src="/./images/20250621_1349161480.png"></p>
+<p><img src="/./images/20250621_1349164709.png"></p>
+<ol start="2">
+<li>配置目标对象的（感觉就很鸡肋了，如果有对方的Key了何必再修改策略）</li>
+</ol>
+<h2 id="模拟测试"><a href="#模拟测试" class="headerlink" title="模拟测试"></a>模拟测试</h2><p>用了两个html去模拟了一个简单的场景：请求外部存储桶内容进行头像显示。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;zh-CN&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>获取头像<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css">      <span class="selector-tag">button</span> &#123;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">padding</span>: <span class="number">15px</span> <span class="number">32px</span>;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">text-align</span>: center;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">text-decoration</span>: none;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">display</span>: inline-block;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">font-size</span>: <span class="number">16px</span>;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">border</span>: none;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">background-color</span>: <span class="number">#4CAF50</span>;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">color</span>: white;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">cursor</span>: pointer;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">border-radius</span>: <span class="number">5px</span>;</span></span><br><span class="line"><span class="language-css">      &#125;</span></span><br><span class="line"><span class="language-css">      <span class="selector-tag">button</span><span class="selector-pseudo">:hover</span> &#123;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">background-color</span>: <span class="number">#45a049</span>;</span></span><br><span class="line"><span class="language-css">      &#125;</span></span><br><span class="line"><span class="language-css">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">&quot;fetchButton&quot;</span>&gt;</span>点击获取头像<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">      <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;fetchButton&#x27;</span>).<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, <span class="keyword">function</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">const</span> imageUrl = <span class="string">&#x27;https://bucket-drblack.oss-cn-beijing.aliyuncs.com/2.png&#x27;</span>;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">        <span class="comment">// 使用时间戳创建唯一URL，避免缓存</span></span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">const</span> timestamp = <span class="keyword">new</span> <span class="title class_">Date</span>().<span class="title function_">getTime</span>();</span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">const</span> url = <span class="string">`displayImage.html?imageUrl=<span class="subst">$&#123;<span class="built_in">encodeURIComponent</span>(imageUrl)&#125;</span>&amp;t=<span class="subst">$&#123;timestamp&#125;</span>`</span>;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">        <span class="comment">// 直接跳转，携带图片URL参数</span></span></span><br><span class="line"><span class="language-javascript">        <span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">href</span> = url;</span></span><br><span class="line"><span class="language-javascript">      &#125;);</span></span><br><span class="line"><span class="language-javascript">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;zh-CN&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>展示头像<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css">        <span class="selector-tag">img</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">width</span>: <span class="number">100%</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">max-width</span>: <span class="number">800px</span>; <span class="comment">/* 设置最大宽度，防止图片过大撑破页面 */</span></span></span><br><span class="line"><span class="language-css">            <span class="attribute">height</span>: auto;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">display</span>: block;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">margin</span>: <span class="number">50px</span> auto;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">id</span>=<span class="string">&quot;avatarImg&quot;</span> <span class="attr">src</span>=<span class="string">&quot;&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;头像&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">const</span> urlParams = <span class="keyword">new</span> <span class="title class_">URLSearchParams</span>(<span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">search</span>);</span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">const</span> imageUrl = urlParams.<span class="title function_">get</span>(<span class="string">&#x27;imageUrl&#x27;</span>);</span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">if</span> (imageUrl) &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;avatarImg&#x27;</span>).<span class="property">src</span> = imageUrl;</span></span><br><span class="line"><span class="language-javascript">        &#125; <span class="keyword">else</span> &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="keyword">const</span> xhr = <span class="keyword">new</span> <span class="title class_">XMLHttpRequest</span>();</span></span><br><span class="line"><span class="language-javascript">            xhr.<span class="title function_">open</span>(<span class="string">&#x27;GET&#x27;</span>, <span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">href</span>, <span class="literal">true</span>);</span></span><br><span class="line"><span class="language-javascript">            xhr.<span class="property">onreadystatechange</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">                <span class="keyword">if</span> (xhr.<span class="property">readyState</span> === <span class="number">4</span> &amp;&amp; xhr.<span class="property">status</span> === <span class="number">200</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">                    <span class="keyword">const</span> responseData = <span class="title class_">JSON</span>.<span class="title function_">parse</span>(xhr.<span class="property">responseText</span>);</span></span><br><span class="line"><span class="language-javascript">                    <span class="keyword">const</span> imageUrl = responseData.<span class="property">imageUrl</span>;</span></span><br><span class="line"><span class="language-javascript">                    <span class="keyword">if</span> (imageUrl) &#123;</span></span><br><span class="line"><span class="language-javascript">                        <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;avatarImg&#x27;</span>).<span class="property">src</span> = imageUrl;</span></span><br><span class="line"><span class="language-javascript">                    &#125;</span></span><br><span class="line"><span class="language-javascript">                &#125;</span></span><br><span class="line"><span class="language-javascript">            &#125;;</span></span><br><span class="line"><span class="language-javascript">            xhr.<span class="title function_">send</span>();</span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>点击获取头像按钮后，界面跳转</p>
+<p><img src="/./images/20250621_1349167099.png"></p>
+<p>显示了一个图片</p>
+<p><img src="/./images/20250621_1349163419.png"></p>
+<p>通过抓包可以分析，此处链接里是一个存储桶的链接。</p>
+<p><img src="/./images/20250621_1349162607.png"></p>
+<p>访问该存储桶，已经列出了目录文件</p>
+<p><img src="/./images/20250621_1349164391.png"></p>
+<p>这时候就可以试试能否直接put文件</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">PUT /towdgg.txt HTTP/1.1</span><br><span class="line">Host: bucket-drblack.oss-cn-beijing.aliyuncs.com</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0</span><br><span class="line">Content-Length: 7</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line">Cache-Control: max-age=0</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Priority: u=0, i</span><br><span class="line">Sec-Ch-Ua: &quot;Chromium&quot;;v=&quot;136&quot;, &quot;Google Chrome&quot;;v=&quot;136&quot;, &quot;Not.A/Brand&quot;;v=&quot;99&quot;</span><br><span class="line">Sec-Ch-Ua-Mobile: ?0</span><br><span class="line">Sec-Ch-Ua-Platform: &quot;Windows&quot;</span><br><span class="line">Sec-Fetch-Dest: document</span><br><span class="line">Sec-Fetch-Mode: navigate</span><br><span class="line">Sec-Fetch-Site: none</span><br><span class="line">Sec-Fetch-User: ?1</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">Accept-Encoding: gzip</span><br><span class="line"></span><br><span class="line">asiawr</span><br></pre></td></tr></table></figure>
+
+<p>用xray也可以检测出来</p>
+<p><img src="/./images/20250621_1349177428.png"></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/jR3cESnkxAm-3PTNUcedZw">干货 | 实战中通过AccessKey与AccessSecret接管文件存储服务的攻击场景</a></p>
+<p><a target="_blank" rel="noopener" href="https://cloud.hacktricks.wiki/en/pentesting-cloud/aws-security/index.html">AWS Pentesting - HackTricks Cloud</a></p>
+<p><a target="_blank" rel="noopener" href="https://wiki.teamssix.com/CloudService/S3/bucket-policy-able-to-write.html">Bucket 策略可写 | T Wiki</a></p>
+<p><a target="_blank" rel="noopener" href="https://x1lys.github.io/2024/07/16/%E6%B5%85%E6%9E%90OSS%E5%AD%98%E5%82%A8%E6%A1%B6%E6%BC%8F%E6%B4%9E/index.html">浅析OSS存储桶漏洞</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://drblack.top">Drblack</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://drblack.top/2025/05/28/%E5%AD%98%E5%82%A8%E6%A1%B6%E6%BC%8F%E6%B4%9E%E6%B5%85%E6%9E%90/">https://drblack.top/2025/05/28/%E5%AD%98%E5%82%A8%E6%A1%B6%E6%BC%8F%E6%B4%9E%E6%B5%85%E6%9E%90/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://drblack.top" target="_blank">Drblack'Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E4%BA%91%E5%AE%89%E5%85%A8/">云安全</a></div><div class="post_share"><div class="social-share" data-image="/img/1000.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2025/03/16/Prime_Series/" title="Prime_Series"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Prime_Series</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/1000.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Drblack</div><div class="author-info__description">努力就会一直幸运</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">18</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/drblack000"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Drblack000" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:drblack_di@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">常见概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%A0%E7%A7%8D%E7%AD%96%E7%95%A5"><span class="toc-number">2.</span> <span class="toc-text">几种策略</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Bucket-ACL%E7%AD%96%E7%95%A5"><span class="toc-number">2.1.</span> <span class="toc-text">Bucket ACL策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Bucket-%E7%AD%96%E7%95%A5"><span class="toc-number">2.2.</span> <span class="toc-text">Bucket 策略</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-number"></span> <span class="toc-text">环境搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%98%BF%E9%87%8C%E4%BA%91"><span class="toc-number">1.</span> <span class="toc-text">阿里云</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%8E%E4%B8%BA%E4%BA%91"><span class="toc-number">2.</span> <span class="toc-text">华为云</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0"><span class="toc-number"></span> <span class="toc-text">漏洞学习</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%81%8D%E5%8E%86%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.</span> <span class="toc-text">遍历漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%83%85%E5%86%B5%E4%B8%80-%E4%BB%85%E5%85%AC%E6%9C%89%E8%AF%BB%E5%86%99"><span class="toc-number">1.1.</span> <span class="toc-text">情况一  仅公有读写</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%83%85%E5%86%B5%E4%BA%8C-ListObject"><span class="toc-number">1.2.</span> <span class="toc-text">情况二 ListObject</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bucket%E6%A1%B6%E5%90%8D%E7%88%86%E7%A0%B4"><span class="toc-number">2.</span> <span class="toc-text">Bucket桶名爆破</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0-%E8%A6%86%E7%9B%96"><span class="toc-number">3.</span> <span class="toc-text">任意文件上传&#x2F;覆盖</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bucket%E6%8E%A5%E7%AE%A1"><span class="toc-number">4.</span> <span class="toc-text">Bucket接管</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Access-key-%E6%B3%84%E9%9C%B2"><span class="toc-number">5.</span> <span class="toc-text">Access key 泄露</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-number">5.1.</span> <span class="toc-text">工作原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%BB%E6%89%BE%E6%96%B9%E6%B3%95"><span class="toc-number">5.2.</span> <span class="toc-text">寻找方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#STS-token%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB"><span class="toc-number">6.</span> <span class="toc-text">STS token重放攻击</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bucket%E7%AD%96%E7%95%A5%E4%BF%AE%E6%94%B9"><span class="toc-number">7.</span> <span class="toc-text">Bucket策略修改</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ACL%E7%AD%96%E7%95%A5%E4%BF%AE%E6%94%B9"><span class="toc-number">8.</span> <span class="toc-text">ACL策略修改</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#403-AccessDenied-%E7%BB%95%E8%BF%87"><span class="toc-number">9.</span> <span class="toc-text">403 AccessDenied 绕过</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E7%96%91%E9%97%AE"><span class="toc-number">10.</span> <span class="toc-text">一些疑问</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E6%8B%9F%E6%B5%8B%E8%AF%95"><span class="toc-number">11.</span> <span class="toc-text">模拟测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="toc-number">12.</span> <span class="toc-text">参考链接</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/28/%E5%AD%98%E5%82%A8%E6%A1%B6%E6%BC%8F%E6%B4%9E%E6%B5%85%E6%9E%90/" title="存储同漏洞浅析">存储同漏洞浅析</a><time datetime="2025-05-28T11:04:23.000Z" title="发表于 2025-05-28 19:04:23">2025-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/16/Prime_Series/" title="Prime_Series">Prime_Series</a><time datetime="2025-03-16T04:35:19.233Z" title="发表于 2025-03-16 12:35:19">2025-03-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/12/Vuln-stack%203/" title="VulnStack Pass-3">VulnStack Pass-3</a><time datetime="2023-11-12T07:02:41.000Z" title="发表于 2023-11-12 15:02:41">2023-11-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/08/PTH%E3%80%81PTK%E3%80%81PTT%E6%94%BB%E5%87%BB%E6%80%BB%E7%BB%93/" title="PTH、PTT、PTK 攻击总结">PTH、PTT、PTK 攻击总结</a><time datetime="2023-11-08T14:10:41.000Z" title="发表于 2023-11-08 22:10:41">2023-11-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/04/php-SER-libs%E9%9D%B6%E5%9C%BA%E8%A7%A3%E9%A2%98/" title="php-SER-libs靶场">php-SER-libs靶场</a><time datetime="2023-11-04T02:10:41.000Z" title="发表于 2023-11-04 10:10:41">2023-11-04</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2025 By Drblack</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
